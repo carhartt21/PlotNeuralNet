@@ -1,4 +1,3 @@
-
 import os
 
 def to_head(projectpath):
@@ -11,7 +10,9 @@ def to_head(projectpath):
 \usetikzlibrary{3d} %for including external image
 """
 
-def to_cor():
+
+# Color definitions
+def to_color():
     return r"""
 \def\ConvColor{rgb:yellow,5;red,2.5;white,5}
 \def\ConvReluColor{rgb:yellow,5;red,5;white,5}
@@ -25,6 +26,7 @@ def to_cor():
 \def\ConcColor{rgb:red, 5}
 """
 
+
 def to_begin():
     return r"""
 \newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
@@ -35,12 +37,12 @@ def to_begin():
 \tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
 """
 
-# layers definition
-
+# Layer definition
 def to_input(pathfile, to='(-3,0,0)', width=8, height=8, name="temp"):
     return r"""
 \node[canvas is zy plane at x=0] (""" + name + """) at """+ to +""" {\includegraphics[width="""+ str(width)+"cm"+""",height="""+ str(height)+"cm"+"""]{"""+ pathfile +"""}};
 """
+
 
 # Conv
 def to_Conv(name, s_filter=256, n_filter=64, offset="(0,0,0)", to="(0,0,0)", width=1, height=40, depth=40, caption=" "):
@@ -59,25 +61,30 @@ def to_Conv(name, s_filter=256, n_filter=64, offset="(0,0,0)", to="(0,0,0)", wid
     };
 """
 
-# Conv,Conv,relu
-# Bottleneck
-def to_ConvConvRelu(name, s_filter=256, n_filter=(64,64), offset="(0,0,0)", to="(0,0,0)", width=(2,2), height=40, depth=40, caption=" "):
+def listToString(list):
+    s = ','.join(str(e) for e in list)
+    return s
+
+
+# Conv,relu
+def to_ConvRelu(name, s_filter=256, n_filter=(64,64), offset="(0,0,0)", to="(0,0,0)", width=(2,2), height=40, depth=40, caption=" "):
+    filter_string = listToString(n_filter)
+    width_string = listToString(width)
     return r"""
 \pic[shift={ """+ offset +""" }] at """+ to +"""
     {RightBandedBox={
         name="""+ name +""",
         caption="""+ caption +""",
-        xlabel={{ """+ str(n_filter[0]) +""", """+ str(n_filter[1]) +""" }},
+        xlabel={{ """+ filter_string +""" }},
         zlabel="""+ str(s_filter) +""",
         fill=\\ConvColor,
         bandfill=\\ConvReluColor,
         height="""+ str(height) +""",
-        width={ """+ str(width[0]) +""" , """+ str(width[1]) +""" },
+        width={ """+ width_string +""" },
         depth="""+ str(depth) +"""
         }
     };
 """
-
 
 
 # Pool
@@ -96,7 +103,8 @@ def to_Pool(name, offset="(0,0,0)", to="(0,0,0)", width=1, height=32, depth=32, 
     };
 """
 
-# unpool4,
+
+# Unpool4,
 def to_UnPool(name, offset="(0,0,0)", to="(0,0,0)", width=1, height=32, depth=32, opacity=0.5, caption=" "):
     return r"""
 \pic[shift={ """+ offset +""" }] at """+ to +"""
@@ -113,7 +121,7 @@ def to_UnPool(name, offset="(0,0,0)", to="(0,0,0)", width=1, height=32, depth=32
 """
 
 
-
+# Conv, resize
 def to_ConvRes(name, s_filter=256, n_filter=64, offset="(0,0,0)", to="(0,0,0)", width=6, height=40, depth=40, opacity=0.2, caption=" "):
     return r"""
 \pic[shift={ """+ offset +""" }] at """+ to +"""
@@ -168,12 +176,14 @@ def to_SoftMax(name, s_filter=10, offset="(0,0,0)", to="(0,0,0)", width=1.5, hei
 """
 
 
+# Short straight connection
 def to_short_connection(of, to):
     return r"""
 \draw [connection]  ("""+of+"""-east) -- node {\\midarrow} ("""+to+"""-west);
 """
 
 
+# Long connection going around
 def to_long_connection(of, to):
     return r"""
 \path ("""+ of +"""-southeast) -- ("""+ of +"""-northeast) coordinate[pos=1.25] ("""+ of +"""-top) ;
@@ -186,6 +196,7 @@ def to_long_connection(of, to):
 """
 
 
+# Skip connection
 def to_skip(of, to, pos=1.25):
     return r"""
 \path ("""+ of +"""-southeast) -- ("""+ of +"""-northeast) coordinate[pos="""+ str(pos) +"""] ("""+ of +"""-top) ;
@@ -196,13 +207,8 @@ def to_skip(of, to, pos=1.25):
 -- node {\copymidarrow} ("""+to+"""-north);
 """
 
-def to_end():
-    return r"""
-\end{tikzpicture}
-\end{document}
-"""
 
-
+# Add ball
 def to_add(name, to, offset="(1,0,0)", opacity=0.4, caption=''):
     return r"""
 \pic[shift={""" + offset + """}] at (""" + to + """-east)
@@ -218,6 +224,7 @@ def to_add(name, to, offset="(1,0,0)", opacity=0.4, caption=''):
 """
 
 
+# Multiply ball
 def to_multiply(name, to, offset="(1,0,0)", opacity=0.5, caption=''):
     return r"""
 \pic[shift={"""+ offset +"""}] at ("""+ to +"""-east)
@@ -232,6 +239,8 @@ def to_multiply(name, to, offset="(1,0,0)", opacity=0.5, caption=''):
     };
 """
 
+
+# Concatenate ball
 def to_concatenate(name, to, offset="(1,0,0)", opacity=0.5, caption=''):
     return r"""
 \pic[shift={"""+ offset +"""}] at ("""+ to +"""-east)
@@ -244,6 +253,13 @@ def to_concatenate(name, to, offset="(1,0,0)", opacity=0.5, caption=''):
         logo=$\\oplus$
         }
     };
+"""
+
+# End document
+def to_end():
+    return r"""
+\end{tikzpicture}
+\end{document}
 """
 
 

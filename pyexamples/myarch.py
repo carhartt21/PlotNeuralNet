@@ -5,11 +5,11 @@ from pycore.blocks  import *
 
 arch = [
     to_head('../'),
-    to_cor(),
+    to_color(),
     to_begin(),
 
     to_input('../examples/fcn8s/cats.jpg'),
-    to_ConvConvRelu(name='ccr_b1', s_filter=500, n_filter=(64, 0), offset="(0, 0, 0)", to="(0, 0, 0)", width=(2, 0), height=40, depth=40),
+    to_ConvRelu(name='ccr_b1', s_filter=500, n_filter=(64, 64, 64, 64, 64), offset="(0, 0, 0)", to="(0, 0, 0)", width=(2, 2, 2, 2, 2), height=40, depth=40),
     to_Pool(name="pool_b1", offset="(0,0,0)", to="(ccr_b1-east)", width=1, height=32, depth=32, opacity=0.5),
 
     *block_2ConvPool(name='b2', bottom='pool_b1', top='pool_b2', s_filter=256, n_filter=128, offset="(1,0,0)", size=(32, 32, 3.5), opacity=0.5),

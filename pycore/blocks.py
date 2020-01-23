@@ -4,7 +4,7 @@ from .tikzeng import *
 # define new block
 def block_2ConvPool(name, bottom, top, s_filter=256, n_filter=64, offset="(1,0,0)", size=(32, 32, 3.5), opacity=0.5):
     return [
-    to_ConvConvRelu(
+    to_ConvRelu(
         name="ccr_{}".format(name),
         s_filter=str(s_filter),
         n_filter=(n_filter, n_filter),

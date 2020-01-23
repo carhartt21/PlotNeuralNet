@@ -13,6 +13,8 @@
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
 \def\SoftmaxColor{rgb:magenta,5;black,7}
 \def\SumColor{rgb:green, 1}
+\def\MultColor{rgb: magenta, 1}
+\def\ConcColor{rgb:red, 5}
 
 \newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
 
@@ -23,7 +25,7 @@
 
 \node[canvas is zy plane at x=0] (temp) at (-3,0,0) {\includegraphics[width=8cm,height=8cm]{../examples/fcn8s/cats.jpg}};
 
-\pic[shift={ (0,0,0) }] at (0,0,0)
+\pic[shift={ (0, 0, 0) }] at (0, 0, 0)
     {RightBandedBox={
         name=ccr_b1,
         caption= ,
@@ -37,7 +39,7 @@
         }
     };
 
-\pic[shift={ (0,0,0) }] at (ccr_b1-east)
+\pic[shift={(0,0,0)}] at (ccr_b1-east)
     {Box={
         name=pool_b1,
         caption= ,
@@ -63,7 +65,7 @@
         }
     };
 
-\pic[shift={ (0,0,0) }] at (ccr_b2-east)
+\pic[shift={(0,0,0)}] at (ccr_b2-east)
     {Box={
         name=pool_b2,
         caption= ,
@@ -91,7 +93,7 @@
         }
     };
 
-\pic[shift={ (0,0,0) }] at (ccr_b3-east)
+\pic[shift={(0,0,0)}] at (ccr_b3-east)
     {Box={
         name=pool_b3,
         caption= ,
@@ -119,7 +121,7 @@
         }
     };
 
-\pic[shift={ (0,0,0) }] at (ccr_b4-east)
+\pic[shift={(0,0,0)}] at (ccr_b4-east)
     {Box={
         name=pool_b4,
         caption= ,
@@ -145,6 +147,32 @@
     };
 
 \draw [connection]  (pool_b4-east) -- node {\midarrow} (add-west);
+
+\pic[shift={(1,0,0)}] at (add-east)
+    {Ball={
+        name=mult,
+        caption=,
+        fill=\MultColor,
+        opacity=0.5,
+        radius=2.5,
+        logo=$\times$
+        }
+    };
+
+\draw [connection]  (add-east) -- node {\midarrow} (mult-west);
+
+\pic[shift={(1,0,0)}] at (mult-east)
+    {Ball={
+        name=conc,
+        caption=,
+        fill=\ConcColor,
+        opacity=0.5,
+        radius=2.5,
+        logo=$\oplus$
+        }
+    };
+
+\draw [connection]  (mult-east) -- node {\midarrow} (conc-west);
 
 \path (ccr_b1-southeast) -- (ccr_b1-northeast) coordinate[pos=1.25] (ccr_b1-top) ;
 \path (ccr_b1-top |- add-north) coordinate (add-top)  ;

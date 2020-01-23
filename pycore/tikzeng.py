@@ -21,6 +21,8 @@ def to_cor():
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
 \def\SoftmaxColor{rgb:magenta,5;black,7}
 \def\SumColor{rgb:green, 1}
+\def\MultColor{rgb: magenta, 1}
+\def\ConcColor{rgb:red, 5}
 """
 
 def to_begin():
@@ -67,8 +69,8 @@ def to_ConvConvRelu(name, s_filter=256, n_filter=(64,64), offset="(0,0,0)", to="
         caption="""+ caption +""",
         xlabel={{ """+ str(n_filter[0]) +""", """+ str(n_filter[1]) +""" }},
         zlabel="""+ str(s_filter) +""",
-        fill=\ConvColor,
-        bandfill=\ConvReluColor,
+        fill=\\ConvColor,
+        bandfill=\\ConvReluColor,
         height="""+ str(height) +""",
         width={ """+ str(width[0]) +""" , """+ str(width[1]) +""" },
         depth="""+ str(depth) +"""
@@ -81,7 +83,7 @@ def to_ConvConvRelu(name, s_filter=256, n_filter=(64,64), offset="(0,0,0)", to="
 # Pool
 def to_Pool(name, offset="(0,0,0)", to="(0,0,0)", width=1, height=32, depth=32, opacity=0.5, caption=" "):
     return r"""
-\pic[shift={ """+ offset +""" }] at """+ to +"""
+\pic[shift={"""+ offset +"""}] at """+ to +"""
     {Box={
         name="""+name+""",
         caption="""+ caption +r""",
@@ -139,7 +141,7 @@ def to_ConvSoftMax(name, s_filter=40, offset="(0,0,0)", to="(0,0,0)", width=1, h
         name=""" + name +""",
         caption="""+ caption +""",
         zlabel="""+ str(s_filter) +""",
-        fill=\SoftmaxColor,
+        fill=\\SoftmaxColor,
         height="""+ str(height) +""",
         width="""+ str(width) +""",
         depth="""+ str(depth) +"""
@@ -156,7 +158,7 @@ def to_SoftMax(name, s_filter=10, offset="(0,0,0)", to="(0,0,0)", width=1.5, hei
         caption="""+ caption +""",
         xlabel={{" ","dummy"}},
         zlabel="""+ str(s_filter) +""",
-        fill=\SoftmaxColor,
+        fill=\\SoftmaxColor,
         opacity="""+ str(opacity) +""",
         height="""+ str(height) +""",
         width="""+ str(width) +""",
@@ -168,7 +170,7 @@ def to_SoftMax(name, s_filter=10, offset="(0,0,0)", to="(0,0,0)", width=1.5, hei
 
 def to_short_connection(of, to):
     return r"""
-\draw [connection]  ("""+of+"""-east) -- node {\midarrow} ("""+to+"""-west);
+\draw [connection]  ("""+of+"""-east) -- node {\\midarrow} ("""+to+"""-west);
 """
 
 
@@ -182,6 +184,7 @@ def to_long_connection(of, to):
 -- node {\midarrow}("""+ of +"""-top -| """+ to +"""-north)
 -- node {\midline}("""+ to +"""-north);
 """
+
 
 def to_skip(of, to, pos=1.25):
     return r"""
@@ -199,16 +202,46 @@ def to_end():
 \end{document}
 """
 
-def to_add(name, to, offset="(0,0,0)", opacity=0.4, caption=''):
+
+def to_add(name, to, offset="(1,0,0)", opacity=0.4, caption=''):
+    return r"""
+\pic[shift={""" + offset + """}] at (""" + to + """-east)
+    {Ball={
+        name=""" + name +""",
+        caption=""" + caption + """,
+        fill=\\SumColor,
+        opacity=""" + str(opacity) + """,
+        radius=2.5,
+        logo=$+$
+        }
+    };
+"""
+
+
+def to_multiply(name, to, offset="(1,0,0)", opacity=0.5, caption=''):
     return r"""
 \pic[shift={"""+ offset +"""}] at ("""+ to +"""-east)
     {Ball={
-        name=""" + name +""",
-        caption="""+ caption +""",
-        fill=\SumColor,
-        opacity="""+ str(opacity) +""",
+        name=""" + name + """,
+        caption="""+ caption + """,
+        fill=\\MultColor,
+        opacity=""" + str(opacity) + """,
         radius=2.5,
-        logo=$+$
+        logo=$\\times$
+        }
+    };
+"""
+
+def to_concatenate(name, to, offset="(1,0,0)", opacity=0.5, caption=''):
+    return r"""
+\pic[shift={"""+ offset +"""}] at ("""+ to +"""-east)
+    {Ball={
+        name=""" + name + """,
+        caption=""" + caption + """,
+        fill=\\ConcColor,
+        opacity=""" + str(opacity) + """,
+        radius=2.5,
+        logo=$\\oplus$
         }
     };
 """

@@ -71,9 +71,35 @@ def block_Res(num, name, bottom, top, s_filter=256, n_filter=64, offset="(0,0,0)
     return lys
 
 
-def sum(name, prev, offset="1,0,0"):
+def sum(name, prev, offset="(1,0,0)"):
     return [
     to_add(
+        name='{}'.format(name),
+        to='{}'.format(prev),
+        offset='{}'.format(offset)
+       ),
+    to_short_connection(
+        "{}".format(prev),
+        "{}".format(name)
+       )
+    ]
+
+def mult(name, prev, offset="(1,0,0)"):
+    return [
+    to_multiply(
+        name='{}'.format(name),
+        to='{}'.format(prev),
+        offset='{}'.format(offset)
+       ),
+    to_short_connection(
+        "{}".format(prev),
+        "{}".format(name)
+       )
+    ]
+
+def conc(name, prev, offset="(1,0,0)"):
+    return [
+    to_concatenate(
         name='{}'.format(name),
         to='{}'.format(prev),
         offset='{}'.format(offset)

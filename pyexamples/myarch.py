@@ -16,6 +16,8 @@ arch = [
     *block_2ConvPool(name='b3', bottom='pool_b2', top='pool_b3', s_filter=128, n_filter=256, offset="(1,0,0)", size=(25, 25, 4.5), opacity=0.5),
     *block_2ConvPool(name='b4', bottom='pool_b3', top='pool_b4', s_filter=64,  n_filter=512, offset="(1,0,0)", size=(16, 16, 5.5), opacity=0.5),
     *sum(name='add', prev='pool_b4', offset='(1,0,0)'),
+    *mult(name='mult', prev='add'),
+    *conc(name='conc', prev='mult'),
     to_long_connection(of='ccr_b1', to='add'),
     to_long_connection(of='ccr_b2', to='add'),
     to_long_connection(of='ccr_b3', to='add'),

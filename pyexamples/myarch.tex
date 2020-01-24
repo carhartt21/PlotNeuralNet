@@ -25,119 +25,72 @@
 
 \node[canvas is zy plane at x=0] (temp) at (-3,0,0) {\includegraphics[width=8cm,height=8cm]{../examples/fcn8s/cats.jpg}};
 
-\pic[shift={ (0, 0, 0) }] at (0, 0, 0)
-    {RightBandedBox={
-        name=ccr_b1,
-        caption= ,
-        xlabel={{ 64,64,64,64 }},
-        zlabel=500,
+\pic[shift={(0,0,0)}] at (0,0,0)
+    {Box={
+        name=conv_1,
+        caption=1,
+        xlabel={(64,)},
+        zlabel=I,
         fill=\ConvColor,
-        bandfill=\ConvReluColor,
         height=40,
-        width={ 2,2,2,2,2 },
-        depth=40
+        depth=40,
+        width={2}
         }
     };
 
-\pic[shift={(0,0,0)}] at (ccr_b1-east)
+\pic[shift={(1,0,0)}] at (conv_1-east)
     {Box={
-        name=pool_b1,
-        caption= ,
-        fill=\PoolColor,
-        opacity=0.5,
-        height=32,
-        width=1,
-        depth=32
-        }
-    };
-
-\pic[shift={ (1,0,0) }] at (pool_b1-east)
-    {RightBandedBox={
-        name=ccr_b2,
-        caption= ,
-        xlabel={{ 128,128 }},
-        zlabel=256,
+        name=conv_2,
+        caption=2,
+        xlabel={(64,)},
+        zlabel=,
         fill=\ConvColor,
-        bandfill=\ConvReluColor,
-        height=32,
-        width={ 3.5,3.5 },
-        depth=32
+        height=20.0,
+        depth=20.0,
+        width={4.0}
         }
     };
 
-\pic[shift={(0,0,0)}] at (ccr_b2-east)
+\draw [connection]  (conv_1-east) -- node {\midarrow} (conv_2-west);
+
+\pic[shift={(0,0,0)}] at (conv_2-east)
     {Box={
-        name=pool_b2,
-        caption= ,
-        fill=\PoolColor,
-        opacity=0.5,
-        height=24,
-        width=1,
-        depth=24
-        }
-    };
-
-\draw [connection]  (pool_b1-east) -- node {\midarrow} (ccr_b2-west);
-
-\pic[shift={ (1,0,0) }] at (pool_b2-east)
-    {RightBandedBox={
-        name=ccr_b3,
-        caption= ,
-        xlabel={{ 256,256 }},
-        zlabel=128,
+        name=conv_3,
+        caption=3,
+        xlabel={(32,)},
+        zlabel=,
         fill=\ConvColor,
-        bandfill=\ConvReluColor,
-        height=25,
-        width={ 4.5,4.5 },
-        depth=25
+        height=20.0,
+        depth=20.0,
+        width={2.0}
         }
     };
 
-\pic[shift={(0,0,0)}] at (ccr_b3-east)
+\pic[shift={(0,0,0)}] at (conv_3-east)
     {Box={
-        name=pool_b3,
-        caption= ,
-        fill=\PoolColor,
-        opacity=0.5,
-        height=19,
-        width=1,
-        depth=19
-        }
-    };
-
-\draw [connection]  (pool_b2-east) -- node {\midarrow} (ccr_b3-west);
-
-\pic[shift={ (1,0,0) }] at (pool_b3-east)
-    {RightBandedBox={
-        name=ccr_b4,
-        caption= ,
-        xlabel={{ 512,512 }},
-        zlabel=64,
+        name=conv_4,
+        caption=4,
+        xlabel={(64,)},
+        zlabel=I/2,
         fill=\ConvColor,
-        bandfill=\ConvReluColor,
-        height=16,
-        width={ 5.5,5.5 },
-        depth=16
+        height=20.0,
+        depth=20.0,
+        width={4.0}
         }
     };
 
-\pic[shift={(0,0,0)}] at (ccr_b4-east)
-    {Box={
-        name=pool_b4,
-        caption= ,
-        fill=\PoolColor,
-        opacity=0.5,
-        height=12,
-        width=1,
-        depth=12
-        }
-    };
+    \draw[densely dashed]
+    (conv_1-nearnortheast) coordinate(a) -- (conv_2-nearnorthwest)
+    (conv_1-nearsoutheast) coordinate(b) -- (conv_2-nearsouthwest)
+    (conv_1-farsoutheast) coordinate(c) -- (conv_2-farsouthwest)
+    (conv_1-farnortheast) coordinate(d) -- (conv_2-farnorthwest)
 
-\draw [connection]  (pool_b3-east) -- node {\midarrow} (ccr_b4-west);
+    (a)--(b)--(c)--(d)
+    ;
 
-\pic[shift={(1,0,0)}] at (pool_b4-east)
+\pic[shift={(1,0,0)}] at (conv_4-east)
     {Ball={
-        name=add,
+        name=short_1,
         caption=,
         fill=\SumColor,
         opacity=0.4,
@@ -146,57 +99,101 @@
         }
     };
 
-\draw [connection]  (pool_b4-east) -- node {\midarrow} (add-west);
+\draw [connection]  (conv_4-east) -- node {\midarrow} (short_1-west);
 
-\pic[shift={(1,0,0)}] at (add-east)
-    {Ball={
-        name=mult,
-        caption=,
-        fill=\MultColor,
-        opacity=0.5,
-        radius=2.5,
-        logo=$\times$
+\path (conv_2-southeast) -- (conv_2-northeast) coordinate[pos=1.25] (conv_2-top) ;
+\path (conv_2-top |- short_1-north) coordinate (short_1-top)  ;
+
+\draw [connection]  (conv_2-northeast)
+-- node {\midline}(conv_2-northeast |- conv_2-top)
+-- node {\midarrow}(conv_2-top -| short_1-north)
+-- node {\midline}(short_1-north);
+
+\pic[shift={(1,0,0)}] at (short_1-east)
+    {Box={
+        name=conv_5,
+        caption=5,
+        xlabel={(128,)},
+        zlabel=,
+        fill=\ConvColor,
+        height=10.0,
+        depth=10.0,
+        width={4.0}
         }
     };
 
-\draw [connection]  (add-east) -- node {\midarrow} (mult-west);
+\draw [connection]  (short_1-east) -- node {\midarrow} (conv_5-west);
 
-\pic[shift={(1,0,0)}] at (mult-east)
-    {Ball={
-        name=conc,
-        caption=,
-        fill=\ConcColor,
-        opacity=0.5,
-        radius=2.5,
-        logo=$\oplus$
+\pic[shift={(0,0,0)}] at (conv_5-east)
+    {Box={
+        name=conv_6,
+        caption=6,
+        xlabel={(64,)},
+        zlabel=,
+        fill=\ConvColor,
+        height=10.0,
+        depth=10.0,
+        width={2.0}
         }
     };
 
-\draw [connection]  (mult-east) -- node {\midarrow} (conc-west);
+\pic[shift={(0,0,0)}] at (conv_6-east)
+    {Box={
+        name=conv_7,
+        caption=7,
+        xlabel={(128,)},
+        zlabel=I/4,
+        fill=\ConvColor,
+        height=10.0,
+        depth=10.0,
+        width={4.0}
+        }
+    };
 
-\path (ccr_b1-southeast) -- (ccr_b1-northeast) coordinate[pos=1.25] (ccr_b1-top) ;
-\path (ccr_b1-top |- add-north) coordinate (add-top)  ;
+    \draw[densely dashed]
+    (conv_4-nearnortheast) coordinate(a) -- (conv_5-nearnorthwest)
+    (conv_4-nearsoutheast) coordinate(b) -- (conv_5-nearsouthwest)
+    (conv_4-farsoutheast) coordinate(c) -- (conv_5-farsouthwest)
+    (conv_4-farnortheast) coordinate(d) -- (conv_5-farnorthwest)
 
-\draw [connection]  (ccr_b1-northeast)
--- node {\midline}(ccr_b1-northeast |- ccr_b1-top)
--- node {\midarrow}(ccr_b1-top -| add-north)
--- node {\midline}(add-north);
+    (a)--(b)--(c)--(d)
+    ;
 
-\path (ccr_b2-southeast) -- (ccr_b2-northeast) coordinate[pos=1.25] (ccr_b2-top) ;
-\path (ccr_b2-top |- add-north) coordinate (add-top)  ;
+\pic[shift={(1,0,0)}] at (conv_7-east)
+    {Ball={
+        name=short_2,
+        caption=,
+        fill=\SumColor,
+        opacity=0.4,
+        radius=2.5,
+        logo=$+$
+        }
+    };
 
-\draw [connection]  (ccr_b2-northeast)
--- node {\midline}(ccr_b2-northeast |- ccr_b2-top)
--- node {\midarrow}(ccr_b2-top -| add-north)
--- node {\midline}(add-north);
+\draw [connection]  (conv_7-east) -- node {\midarrow} (short_2-west);
 
-\path (ccr_b3-southeast) -- (ccr_b3-northeast) coordinate[pos=1.25] (ccr_b3-top) ;
-\path (ccr_b3-top |- add-north) coordinate (add-top)  ;
+\path (conv_5-southeast) -- (conv_5-northeast) coordinate[pos=1.25] (conv_5-top) ;
+\path (conv_5-top |- short_2-north) coordinate (short_2-top)  ;
 
-\draw [connection]  (ccr_b3-northeast)
--- node {\midline}(ccr_b3-northeast |- ccr_b3-top)
--- node {\midarrow}(ccr_b3-top -| add-north)
--- node {\midline}(add-north);
+\draw [connection]  (conv_5-northeast)
+-- node {\midline}(conv_5-northeast |- conv_5-top)
+-- node {\midarrow}(conv_5-top -| short_2-north)
+-- node {\midline}(short_2-north);
+
+\node [shift={(0.35,0,0)}] at (short_2-east)(e1){\ldots};
+
+\pic[shift={(0.5,0,0)}] at (e1.east)
+{Ball={
+		name=short_3,
+		caption=,
+		fill=\SumColor,
+		opacity=0.4,
+		radius=2.5,
+		logo=$+$
+	}
+};
+
+
 
 \end{tikzpicture}
 \end{document}

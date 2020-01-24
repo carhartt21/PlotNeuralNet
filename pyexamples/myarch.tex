@@ -8,6 +8,8 @@
 \def\ConvColor{rgb:yellow,5;red,2.5;white,5}
 \def\ConvReluColor{rgb:yellow,5;red,5;white,5}
 \def\PoolColor{rgb:red,1;black,0.3}
+\def\UpsampleColor{rgb:green,5; white,2}
+\def\DetectColor{rgb:red,5; white,2}
 \def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
 \def\FcColor{rgb:blue,5;red,2.5;white,5}
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
@@ -26,69 +28,73 @@
 \node[canvas is zy plane at x=0] (temp) at (-3,0,0) {\includegraphics[width=8cm,height=8cm]{../examples/fcn8s/cats.jpg}};
 
 \pic[shift={(0,0,0)}] at (0,0,0)
-    {Box={
-        name=conv_1,
-        caption=1,
+    {RightBandedBox={
+        name=conv_0,
+        caption=0,
         xlabel={(64,)},
         zlabel=I,
         fill=\ConvColor,
+        bandfill=\ConvReluColor,
         height=40,
         depth=40,
         width={2}
         }
     };
 
-\pic[shift={(1,0,0)}] at (conv_1-east)
-    {Box={
-        name=conv_2,
-        caption=2,
+\pic[shift={(1,0,0)}] at (conv_0-east)
+    {RightBandedBox={
+        name=conv_1,
+        caption=1,
         xlabel={(64,)},
         zlabel=,
         fill=\ConvColor,
+        bandfill=\ConvReluColor,
         height=20.0,
         depth=20.0,
-        width={4.0}
+        width={3.0}
         }
     };
 
-\draw [connection]  (conv_1-east) -- node {\midarrow} (conv_2-west);
+\draw [connection]  (conv_0-east) -- node {\midarrow} (conv_1-west);
 
-\pic[shift={(0,0,0)}] at (conv_2-east)
-    {Box={
-        name=conv_3,
-        caption=3,
+\pic[shift={(0,0,0)}] at (conv_1-east)
+    {RightBandedBox={
+        name=conv_2,
+        caption=2,
         xlabel={(32,)},
         zlabel=,
         fill=\ConvColor,
+        bandfill=\ConvReluColor,
         height=20.0,
         depth=20.0,
-        width={2.0}
+        width={2.5}
         }
     };
 
-\pic[shift={(0,0,0)}] at (conv_3-east)
-    {Box={
-        name=conv_4,
-        caption=4,
+\pic[shift={(0,0,0)}] at (conv_2-east)
+    {RightBandedBox={
+        name=conv_3,
+        caption=3,
         xlabel={(64,)},
         zlabel=I/2,
         fill=\ConvColor,
+        bandfill=\ConvReluColor,
         height=20.0,
         depth=20.0,
-        width={4.0}
+        width={3.0}
         }
     };
 
     \draw[densely dashed]
-    (conv_1-nearnortheast) coordinate(a) -- (conv_2-nearnorthwest)
-    (conv_1-nearsoutheast) coordinate(b) -- (conv_2-nearsouthwest)
-    (conv_1-farsoutheast) coordinate(c) -- (conv_2-farsouthwest)
-    (conv_1-farnortheast) coordinate(d) -- (conv_2-farnorthwest)
+    (conv_0-nearnortheast) coordinate(a) -- (conv_1-nearnorthwest)
+    (conv_0-nearsoutheast) coordinate(b) -- (conv_1-nearsouthwest)
+    (conv_0-farsoutheast) coordinate(c) -- (conv_1-farsouthwest)
+    (conv_0-farnortheast) coordinate(d) -- (conv_1-farnorthwest)
 
     (a)--(b)--(c)--(d)
     ;
 
-\pic[shift={(1,0,0)}] at (conv_4-east)
+\pic[shift={(1.5,0,0)}] at (conv_3-east)
     {Ball={
         name=short_1,
         caption=,
@@ -99,67 +105,70 @@
         }
     };
 
-\draw [connection]  (conv_4-east) -- node {\midarrow} (short_1-west);
+\draw [connection]  (conv_3-east) -- node {\midarrow} (short_1-west);
 
-\path (conv_2-southeast) -- (conv_2-northeast) coordinate[pos=1.25] (conv_2-top) ;
-\path (conv_2-top |- short_1-north) coordinate (short_1-top)  ;
+\path (conv_1-southeast) -- (conv_1-northeast) coordinate[pos=1.25] (conv_1-top) ;
+\path (conv_1-top |- short_1-north) coordinate (short_1-top)  ;
 
-\draw [connection]  (conv_2-northeast)
--- node {\midline}(conv_2-northeast |- conv_2-top)
--- node {\midarrow}(conv_2-top -| short_1-north)
+\draw [connection]  (conv_1-northeast)
+-- node {\midline}(conv_1-northeast |- conv_1-top)
+-- node {\midarrow}(conv_1-top -| short_1-north)
 -- node {\midline}(short_1-north);
 
 \pic[shift={(1,0,0)}] at (short_1-east)
-    {Box={
-        name=conv_5,
-        caption=5,
+    {RightBandedBox={
+        name=conv_4,
+        caption=4,
         xlabel={(128,)},
         zlabel=,
         fill=\ConvColor,
+        bandfill=\ConvReluColor,
         height=10.0,
         depth=10.0,
-        width={4.0}
+        width={3.5}
         }
     };
 
-\draw [connection]  (short_1-east) -- node {\midarrow} (conv_5-west);
+\draw [connection]  (short_1-east) -- node {\midarrow} (conv_4-west);
 
-\pic[shift={(0,0,0)}] at (conv_5-east)
-    {Box={
-        name=conv_6,
-        caption=6,
+\pic[shift={(0,0,0)}] at (conv_4-east)
+    {RightBandedBox={
+        name=conv_5,
+        caption=5,
         xlabel={(64,)},
         zlabel=,
         fill=\ConvColor,
+        bandfill=\ConvReluColor,
         height=10.0,
         depth=10.0,
-        width={2.0}
+        width={3.0}
         }
     };
 
-\pic[shift={(0,0,0)}] at (conv_6-east)
-    {Box={
-        name=conv_7,
-        caption=7,
+\pic[shift={(0,0,0)}] at (conv_5-east)
+    {RightBandedBox={
+        name=conv_6,
+        caption=6,
         xlabel={(128,)},
         zlabel=I/4,
         fill=\ConvColor,
+        bandfill=\ConvReluColor,
         height=10.0,
         depth=10.0,
-        width={4.0}
+        width={3.5}
         }
     };
 
     \draw[densely dashed]
-    (conv_4-nearnortheast) coordinate(a) -- (conv_5-nearnorthwest)
-    (conv_4-nearsoutheast) coordinate(b) -- (conv_5-nearsouthwest)
-    (conv_4-farsoutheast) coordinate(c) -- (conv_5-farsouthwest)
-    (conv_4-farnortheast) coordinate(d) -- (conv_5-farnorthwest)
+    (conv_3-nearnortheast) coordinate(a) -- (conv_4-nearnorthwest)
+    (conv_3-nearsoutheast) coordinate(b) -- (conv_4-nearsouthwest)
+    (conv_3-farsoutheast) coordinate(c) -- (conv_4-farsouthwest)
+    (conv_3-farnortheast) coordinate(d) -- (conv_4-farnorthwest)
 
     (a)--(b)--(c)--(d)
     ;
 
-\pic[shift={(1,0,0)}] at (conv_7-east)
+\pic[shift={(1,0,0)}] at (conv_6-east)
     {Ball={
         name=short_2,
         caption=,
@@ -170,30 +179,178 @@
         }
     };
 
-\draw [connection]  (conv_7-east) -- node {\midarrow} (short_2-west);
+\draw [connection]  (conv_6-east) -- node {\midarrow} (short_2-west);
 
-\path (conv_5-southeast) -- (conv_5-northeast) coordinate[pos=1.25] (conv_5-top) ;
-\path (conv_5-top |- short_2-north) coordinate (short_2-top)  ;
+\path (conv_4-southeast) -- (conv_4-northeast) coordinate[pos=1.25] (conv_4-top) ;
+\path (conv_4-top |- short_2-north) coordinate (short_2-top)  ;
 
-\draw [connection]  (conv_5-northeast)
--- node {\midline}(conv_5-northeast |- conv_5-top)
--- node {\midarrow}(conv_5-top -| short_2-north)
+\draw [connection]  (conv_4-northeast)
+-- node {\midline}(conv_4-northeast |- conv_4-top)
+-- node {\midarrow}(conv_4-top -| short_2-north)
 -- node {\midline}(short_2-north);
 
-\node [shift={(0.35,0,0)}] at (short_2-east)(e1){\ldots};
+\node [shift={(0.35, 0, 0)}] at (short_2-east) (e1) {\ldots};
 
-\pic[shift={(0.5,0,0)}] at (e1.east)
-{Ball={
-		name=short_3,
-		caption=,
-		fill=\SumColor,
-		opacity=0.4,
-		radius=2.5,
-		logo=$+$
-	}
-};
+\pic[shift={(0.35,0,0)}] at (e1)
+    {RightBandedBox={
+        name=conv_18,
+        caption=18,
+        xlabel={(256,)},
+        zlabel=I/8,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=5.0,
+        depth=5.0,
+        width={4.0}
+        }
+    };
 
+\node [shift={(0.4, 0, 0)}] at (conv_18-east) (e2) {\ldots};
 
+\pic[shift={(0.4,0,0)}] at (e2)
+    {RightBandedBox={
+        name=conv_36,
+        caption=36,
+        xlabel={(512,)},
+        zlabel=I/16,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=2.5,
+        depth=2.5,
+        width={4.5}
+        }
+    };
+
+\node [shift={(0.4, 0, 0)}] at (conv_36-east) (e3) {\ldots};
+
+\pic[shift={(0.4,0,0)}] at (e3)
+    {RightBandedBox={
+        name=conv_61,
+        caption=61,
+        xlabel={(1024,)},
+        zlabel=I/32,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=1.25,
+        depth=1.25,
+        width={5.0}
+        }
+    };
+
+\node [shift={(0.4,0,0)}] at (conv_61-east) (e4) {\ldots};
+
+\pic[shift={(0.4,0,0)}] at (e4)
+    {RightBandedBox={
+        name=conv_79,
+        caption=79,
+        xlabel={(512,)},
+        zlabel=,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=1.25,
+        depth=1.25,
+        width={4.5}
+        }
+    };
+
+\pic[shift={(-0.5,0,3)}] at (conv_79-east)
+    {RightBandedBox={
+        name=conv_80,
+        caption= ,
+        xlabel={((),)},
+        zlabel=,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=1.25,
+        depth=1.25,
+        width={4.0}
+        }
+    };
+
+\draw [connection]  (conv_79-near) -- node {\midarrow} (conv_80-far);
+
+\pic[shift={(-0.5,0,3)}] at (conv_80-east)
+    {RightBandedBox={
+        name=conv_81,
+        caption= ,
+        xlabel={((),)},
+        zlabel=,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=1.25,
+        depth=1.25,
+        width={5.0}
+        }
+    };
+
+\draw [connection]  (conv_80-near) -- node {\midarrow} (conv_81-far);
+
+\pic[shift={(-0.5,0,3)}] at (conv_81-east)
+    {RightBandedBox={
+        name=conv_82,
+        caption=82,
+        xlabel={(256,)},
+        zlabel=I/32,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=1.25,
+        depth=1.25,
+        width={4.0}
+        }
+    };
+
+\draw [connection]  (conv_81-near) -- node {\midarrow} (conv_82-far);
+
+\pic[shift={(1,0,0)}] at (conv_79-east)
+    {RightBandedBox={
+        name=conv_83,
+        caption=83,
+        xlabel={(256,)},
+        zlabel=,
+        fill=\ConvColor,
+        bandfill=\ConvReluColor,
+        height=1.25,
+        depth=1.25,
+        width={4.0}
+        }
+    };
+
+\draw [connection]  (conv_79-east) -- node {\midarrow} (conv_83-west);
+
+\pic[shift={(1,0,0)}] at (conv_83-east)
+    {Box={
+        name=conv_84,
+        caption=84,
+        xlabel={(256,)},
+        zlabel=I/16,
+        fill=\UpsampleColor,
+        height=2.5,
+        depth=2.5,
+        width={2}
+        }
+    };
+
+    \draw[densely dashed]
+    (conv_83-nearnortheast) coordinate(a) -- (conv_84-nearnorthwest)
+    (conv_83-nearsoutheast) coordinate(b) -- (conv_84-nearsouthwest)
+    (conv_83-farsoutheast) coordinate(c) -- (conv_84-farsouthwest)
+    (conv_83-farnortheast) coordinate(d) -- (conv_84-farnorthwest)
+
+    (a)--(b)--(c)--(d)
+    ;
+
+\pic[shift={(1,0,0)}] at (conv_84-east)
+    {Ball={
+        name=conc1,
+        caption=,
+        fill=\ConcColor,
+        opacity=0.5,
+        radius=2.5,
+        logo=$\oplus$
+        }
+    };
+
+\draw [connection]  (conv_84-east) -- node {\midarrow} (conc1-west);
 
 \end{tikzpicture}
 \end{document}

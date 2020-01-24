@@ -28,6 +28,8 @@ def to_Color():
 \def\ConvColor{rgb:yellow,5;red,2.5;white,5}
 \def\ConvReluColor{rgb:yellow,5;red,5;white,5}
 \def\PoolColor{rgb:red,1;black,0.3}
+\def\UpsampleColor{rgb:green,5; white,2}
+\def\DetectColor{rgb:red,5; white,2}
 \def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
 \def\FcColor{rgb:blue,5;red,2.5;white,5}
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
@@ -83,7 +85,7 @@ def to_Conv(name, s_filter='', n_filter=(64, 64), offset='(0,0,0)', to='0,0,0', 
 
 
 # Conv,relu
-def to_ConvRelu(name, s_filter=256, n_filter=(64,64), offset='(0,0,0)', to='0,0,0', width=(2,2), height=40, depth=40, caption=' '):
+def to_ConvRelu(name, s_filter='', n_filter=(), offset='(0,0,0)', to='0,0,0', width=(2), size=(40,40), caption=' '):
     if isinstance(width, list):
         if(len(n_filter) != len(width)):
             warnings.warn('Size of n_filters does not match size of width');
@@ -93,17 +95,42 @@ def to_ConvRelu(name, s_filter=256, n_filter=(64,64), offset='(0,0,0)', to='0,0,
         xlabel_string = str(n_filter)
         width_string = str(width)
     return r'''
-\pic[shift={'''+ offset +''' }] at ('''+ to +''')
+\pic[shift={'''+ offset +'''}] at ('''+ to +''')
     {RightBandedBox={
-        name='''+ name +''',
-        caption='''+ caption +''',
-        xlabel={{'''+ xlabel_string +'''}},
+        name=''' + name +''',
+        caption='''+ caption +r''',
+        xlabel={('''+ xlabel_string +''',)},
         zlabel='''+ str(s_filter) +''',
         fill=\\ConvColor,
         bandfill=\\ConvReluColor,
-        height='''+ str(height) +''',
-        width={'''+ width_string +'''},
-        depth='''+ str(depth) +'''
+        height='''+ str(size[0]) +''',
+        depth='''+ str(size[1]) +''',
+        width={'''+ width_string +'''}
+        }
+    };
+'''
+
+# Conv,relu
+def to_Upsample(name, s_filter='', n_filter=(), offset='(0,0,0)', to='0,0,0', width=(2), size=(40,40), caption=' '):
+    if isinstance(width, list):
+        if(len(n_filter) != len(width)):
+            warnings.warn('Size of n_filters does not match size of width');
+        xlabel_string = listToString(n_filter)
+        width_string = listToString(width)
+    else:
+        xlabel_string = str(n_filter)
+        width_string = str(width)
+    return r'''
+\pic[shift={'''+ offset +'''}] at ('''+ to +''')
+    {Box={
+        name=''' + name +''',
+        caption='''+ caption +r''',
+        xlabel={('''+ xlabel_string +''',)},
+        zlabel='''+ str(s_filter) +''',
+        fill=\\UpsampleColor,
+        height='''+ str(size[0]) +''',
+        depth='''+ str(size[1]) +''',
+        width={'''+ width_string +'''}
         }
     };
 '''
@@ -121,6 +148,31 @@ def to_Pool(name, offset='(0,0,0)', to='(0,0,0)', width=1, height=32, depth=32, 
         height='''+ str(height) +''',
         width='''+ str(width) +''',
         depth='''+ str(depth) +'''
+        }
+    };
+'''
+
+# Detect
+def to_Detect(name, s_filter='', n_filter=(64, 64), offset='(0,0,0)', to='0,0,0', width=(2), size=(40,40), caption=' '):
+    if isinstance(width, list):
+        if(len(n_filter) != len(width)):
+            warnings.warn('Size of n_filters does not match size of width');
+        xlabel_string = listToString(n_filter)
+        width_string = listToString(width)
+    else:
+        xlabel_string = str(n_filter)
+        width_string = str(width)
+    return r'''
+\pic[shift={'''+ offset +'''}] at ('''+ to +''')
+    {Box={
+        name=''' + name +''',
+        caption='''+ caption +r''',
+        xlabel={('''+ xlabel_string +''',)},
+        zlabel='''+ str(s_filter) +''',
+        fill=\\DetectColor,
+        height='''+ str(size[0]) +''',
+        depth='''+ str(size[1]) +''',
+        width={'''+ width_string +'''}
         }
     };
 '''
@@ -199,9 +251,9 @@ def to_SoftMax(name, s_filter=10, offset='(0,0,0)', to='(0,0,0)', width=1.5, hei
 
 
 # Short straight connection
-def to_ShortConnection(of, to):
+def to_ShortConnection(of, to, anchor_of='-east', anchor_to='-west'):
     return r'''
-\draw [connection]  ('''+of+'''-east) -- node {\\midarrow} ('''+to+'''-west);
+\draw [connection]  ('''+of+anchor_of+''') -- node {\\midarrow} ('''+to+anchor_to+''');
 '''
 
 
@@ -291,9 +343,9 @@ def to_Resample(of, to):
 '''
 
 
-def to_Ellipsis(of, name):
+def to_Ellipsis(of, name, offset='(0.5,0,0)'):
     return r'''
-    \node [shift={(0.35,0,0)}] at ('''+of+'''-east) ('''+name+''') {\\ldots};
+\node [shift={'''+offset+'''}] at ('''+of+'''-east) ('''+name+''') {\\ldots};
 '''
 
 

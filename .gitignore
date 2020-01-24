@@ -83,3 +83,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# other
+*.pdf
+*.tex

@@ -1,4 +1,4 @@
-import os, warnings
+import os
 
 def to_head(projectpath):
     pathlayers = os.path.join(projectpath, 'layers/').replace('\\', '/')
@@ -69,7 +69,7 @@ def listToString(list):
 # Conv,relu
 def to_ConvRelu(name, s_filter=256, n_filter=(64,64), offset="(0,0,0)", to="(0,0,0)", width=(2,2), height=40, depth=40, caption=" "):
     if(len(n_filter) != len(width)):
-        warnings.warn("Size of n_filters does not match size of width");
+        raise Exception("Size of n_filters does not match size of width")
     filter_string = listToString(n_filter)
     width_string = listToString(width)
     return r"""
@@ -263,10 +263,3 @@ def to_end():
 \end{tikzpicture}
 \end{document}
 """
-
-
-def to_generate(arch, pathname="file.tex"):
-    with open(pathname, "w") as f:
-        for c in arch:
-            # print(c)
-            f.write(str(c))

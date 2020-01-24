@@ -36,7 +36,8 @@ def creatArchitecture(arch):
     arch += [*block_ConvRelu(name='conv_83', prev='conv_79', n_filter=(256), offset='(1,0,0)', size=(input/32, input/32), caption='83', conn =True)]
     arch += to_Upsample(name='conv_84', to='conv_83-east', s_filter='I/16', n_filter=(256), offset='(1,0,0)', size=(input/16, input/16), caption='84')
     arch += to_Resample(of='conv_83', to='conv_84')
-    arch += [*block_Conc(name='conc1', prev='conv_84', offset='(1,0,0)')]
+    arch += [*block_Conc(name='conc_1', prev='conv_84', offset='(1,0,0)')]
+    arch += to_LongConnection(of='conv_36', to= 'conc_1')
     #
     # arch += block_Sum
 

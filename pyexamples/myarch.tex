@@ -341,7 +341,7 @@
 
 \pic[shift={(1,0,0)}] at (conv_84-east)
     {Ball={
-        name=conc1,
+        name=conc_1,
         caption=,
         fill=\ConcColor,
         opacity=0.5,
@@ -350,7 +350,15 @@
         }
     };
 
-\draw [connection]  (conv_84-east) -- node {\midarrow} (conc1-west);
+\draw [connection]  (conv_84-east-east) -- node {\midarrow} (conc_1-west);
+
+\path (conv_36-southeast) -- (conv_36-northeast) coordinate[pos=1.25] (conv_36-top) ;
+\path (conv_36-top |- conc_1-north) coordinate (conc_1-top)  ;
+
+\draw [connection]  (conv_36-northeast)
+-- node {\midline}(conv_36-northeast |- conv_36-top)
+-- node {\midarrow}(conv_36-top -| conc_1-north)
+-- node {\midline}(conc_1-north);
 
 \end{tikzpicture}
 \end{document}

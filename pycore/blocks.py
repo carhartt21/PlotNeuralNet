@@ -225,7 +225,7 @@ def block_MultiConvRelu(num, name, prev, layer_num=0, s_filter='', n_filter=64, 
     return lys
 
 
-def block_MultiConvReluZ(num, name, prev, layer_num=0, s_filter='', n_filter=64, scale=32, name_start=0, offset='(1,0,0)', width= '0', size=(32,32), opacity=0.5, conn=False, anchor='-east'):
+def block_MultiConvReluZ(num, name, prev, layer_num=0, s_filter='', n_filter='', scale=32, name_start=0, offset='(1,0,0)', width= '0', size=(32,32), opacity=0.5, conn=False, anchor='-east'):
     lys = []
     j = 0
     layers = [*['{}_{}'.format(name, i)for i in range(name_start, num+name_start)]]

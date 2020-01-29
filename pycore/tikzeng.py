@@ -81,7 +81,7 @@ def to_Grid(name, to, size=[4, 4], steps=1):
 def to_Conv(name, s_filter='', n_filter=(64, 64), offset='(0,0,0)', to='0,0,0', width=(2), size=[40, 40], caption=' '):
     if isinstance(width, list):
         if(len(n_filter) != len(width)):
-            warnings.warn('Size of n_filters does not match size of width');
+            raise Exception("Size of n_filters does not match size of width")
         xlabel_string = listToString(n_filter)
         width_string = listToString(width)
     else:
@@ -104,10 +104,10 @@ def to_Conv(name, s_filter='', n_filter=(64, 64), offset='(0,0,0)', to='0,0,0', 
 
 
 # Conv,relu
-def to_ConvRelu(name, s_filter='', n_filter=(), offset='(0,0,0)', to='0,0,0', width=(2), size=(40,40), caption=' '):
+def to_ConvRelu(name, s_filter='', n_filter='', offset='(0,0,0)', to='0,0,0', width=(2), size=(40,40), caption=' '):
     if isinstance(width, list):
         if(len(n_filter) != len(width)):
-            warnings.warn('Size of n_filters does not match size of width');
+            raise Exception("Size of n_filters does not match size of width")
         xlabel_string = listToString(n_filter)
         width_string = listToString(width)
     else:
@@ -356,7 +356,7 @@ def to_Add(name, to, offset='(1,0,0)', opacity=0.4, caption=''):
 
 
 # Multiply ball
-def to_Multiply(name, to, offset='(1,0,0)', opacity=0.5, caption='', ):
+def to_Multiply(name, to, offset='(1,0,0)', opacity=0.6, caption='', ):
     return r'''
 \pic[shift={'''+ offset +'''}] at ('''+ to +'''-east)
     {Ball={
@@ -372,7 +372,7 @@ def to_Multiply(name, to, offset='(1,0,0)', opacity=0.5, caption='', ):
 
 
 # Concatenate ball
-def to_Concatenate(name, to, offset='(1,0,0)', opacity=0.5, caption=''):
+def to_Concatenate(name, to, offset='(1,0,0)', opacity=0.6, caption=''):
     return r'''
 \pic[shift={'''+ offset +'''}] at ('''+ to +'''-east)
     {Ball={
@@ -394,8 +394,6 @@ def to_Resample(of, to):
     ('''+of+'''-nearsoutheast) coordinate(b) -- ('''+to+'''-nearsouthwest)
     ('''+of+'''-farsoutheast) coordinate(c) -- ('''+to+'''-farsouthwest)
     ('''+of+'''-farnortheast) coordinate(d) -- ('''+to+'''-farnorthwest)
-
-    (a)--(b)--(c)--(d)
     ;
 '''
 
@@ -465,7 +463,7 @@ def to_Legend():
 		name=legend_5,
 		caption=,
 		fill=\ConcColor,
-		opacity=0.5,
+		opacity=0.6,
 		radius=2,
 		logo=$\oplus$
 	}
@@ -477,12 +475,6 @@ def to_Legend():
 \node(grid_yolo_1) at (image_yolo) {\drawgrid{5}{5}{0.384615385}};
 \node[canvas is zy plane at x=0] (grid_yolo_1) at (image_yolo_83) {\drawgrid{0.25}{0.25}{1.0}};
 \node[draw=black,ultra thick,inner sep=2.5cm,rectangle] (rectangle) at (image_yolo) {};
+\node[anchor=north] at (rectangle.south) {$13\times13$ grid};
 \draw[ultra thick] (circle.south east) -- (rectangle.north);
 '''
-
-
-def to_Generate(arch, pathname='file.tex'):
-    with open(pathname, 'w') as f:
-        for c in arch:
-            # print(c)
-            f.write(str(c))

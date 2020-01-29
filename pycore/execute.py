@@ -1,4 +1,3 @@
-
 import sys, subprocess, os
 
 def callProcessWithCommand(cmd):
@@ -15,8 +14,7 @@ def openPDF(tool, pdf = "file.pdf"):
     callProcessWithCommand(tool + " " + pdf)
 
 def texToPDF(tex = "file.tex", deleteTmpFiles = True):
-    callProcessWithCommand('pdflatex "' + str(tex))
-
+    callProcessWithCommand('pdflatex ' + str(tex))
     if deleteTmpFiles:
         deleteFiles("*.aux *.log")
 

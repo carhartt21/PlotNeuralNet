@@ -28,7 +28,7 @@
 \tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
 \tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
 
-\node[canvas is zy plane at x=0] (image_0) at (-3,0,0) {\includegraphics[width=10cm,height=10cm]{\input_image}};
+\node[canvas is zy plane at x=0] (image_0) at (-4,0,0) {\includegraphics[width=10cm,height=10cm]{\input_image}};
 
 \pic[shift={(0,0,0)}] at (0,0,0)
     {RightBandedBox={
@@ -43,6 +43,8 @@
         width={2}
         }
     };
+
+\draw [connection] (image_0) -- node {\midarrow} (conv_0-west);
 
 \pic[shift={(3,0,0)}] at (conv_0-east)
     {RightBandedBox={
@@ -93,11 +95,9 @@
     (conv_0-nearsoutheast) coordinate(b) -- (conv_1-nearsouthwest)
     (conv_0-farsoutheast) coordinate(c) -- (conv_1-farsouthwest)
     (conv_0-farnortheast) coordinate(d) -- (conv_1-farnorthwest)
-
-    (a)--(b)--(c)--(d)
     ;
 
-\pic[shift={(1.5,0,0)}] at (conv_3-east)
+\pic[shift={(1.75,0,0)}] at (conv_3-east)
     {Box={
         name=short_4,
         caption=4,
@@ -109,6 +109,8 @@
         }
     };
 
+\draw [connection] (conv_3-east) -- node {\midarrow} (short_4-west);
+
 \path (conv_1-south) -- (conv_1-north) coordinate[pos=1.3] (conv_1-dummy) ;
 \path (conv_1-dummy |- short_4-northwest) coordinate (short_4-dummy)  ;
 
@@ -117,7 +119,7 @@
 -- node {\midarrow}(conv_1-dummy -| short_4-northwest)
 -- node {}(short_4-northwest);
 
-\pic[shift={(1,0,0)}] at (short_4-east)
+\pic[shift={(1.5,0,0)}] at (short_4-east)
     {RightBandedBox={
         name=conv_5,
         caption=5,
@@ -166,8 +168,6 @@
     (short_4-nearsoutheast) coordinate(b) -- (conv_5-nearsouthwest)
     (short_4-farsoutheast) coordinate(c) -- (conv_5-farsouthwest)
     (short_4-farnortheast) coordinate(d) -- (conv_5-farnorthwest)
-
-    (a)--(b)--(c)--(d)
     ;
 
 \pic[shift={(1,0,0)}] at (conv_7-east)
@@ -254,7 +254,7 @@
     {RightBandedBox={
         name=conv_80,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -270,7 +270,7 @@
     {RightBandedBox={
         name=conv_81,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -366,7 +366,7 @@
         name=conc_87,
         caption=,
         fill=\ConcColor,
-        opacity=0.5,
+        opacity=0.6,
         radius=2,
         logo=$\oplus$
         }
@@ -402,7 +402,7 @@
     {RightBandedBox={
         name=conv_91,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -418,7 +418,7 @@
     {RightBandedBox={
         name=conv_92,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -514,7 +514,7 @@
         name=conc_98,
         caption=,
         fill=\ConcColor,
-        opacity=0.5,
+        opacity=0.6,
         radius=2,
         logo=$\oplus$
         }
@@ -550,7 +550,7 @@
     {RightBandedBox={
         name=conv_103,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -566,7 +566,7 @@
     {RightBandedBox={
         name=conv_104,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -662,7 +662,7 @@
         name=conc_110,
         caption=,
         fill=\ConcColor,
-        opacity=0.5,
+        opacity=0.6,
         radius=2,
         logo=$\oplus$
         }
@@ -698,7 +698,7 @@
     {RightBandedBox={
         name=conv_115,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -714,7 +714,7 @@
     {RightBandedBox={
         name=conv_116,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -810,7 +810,7 @@
         name=conc_122,
         caption=,
         fill=\ConcColor,
-        opacity=0.5,
+        opacity=0.6,
         radius=2,
         logo=$\oplus$
         }
@@ -826,7 +826,7 @@
 -- node {\midarrow}(short_4-dummy -| conc_122-north)
 -- node {}(conc_122-north);
 
-\pic[shift={(1.5,0,0)}] at (conc_122-east)
+\pic[shift={(2,0,0)}] at (conc_122-east)
     {RightBandedBox={
         name=conv_126,
         caption=126,
@@ -846,7 +846,7 @@
     {RightBandedBox={
         name=conv_127,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -862,7 +862,7 @@
     {RightBandedBox={
         name=conv_128,
         caption= ,
-        xlabel={((),)},
+        xlabel={(,)},
         zlabel=,
         fill=\ConvColor,
         bandfill=\ConvReluColor,
@@ -904,7 +904,7 @@
 
 \node[canvas is zy plane at x=0] (image_yolo_130) at (yolo_130-east) {\includegraphics[width=4.0cm,height=4.0cm]{\input_image}};
 
-\node[canvas is zy plane at x=0] (grid_yolo_130) at (image_yolo_130) {\drawgrid{4.0}{4.0}{0.25}};
+\node[canvas is zy plane at x=0] (grid_yolo_130) at (image_yolo_130) {\drawgrid{4.0}{4.0}{0.2}};
 
 \draw [connection] (conv_129-near) -- node {\midarrow} (yolo_130-far);
 
@@ -958,7 +958,7 @@
 		name=legend_5,
 		caption=,
 		fill=\ConcColor,
-		opacity=0.5,
+		opacity=0.6,
 		radius=2,
 		logo=$\oplus$
 	}
@@ -970,7 +970,8 @@
 \node(grid_yolo_1) at (image_yolo) {\drawgrid{5}{5}{0.384615385}};
 \node[canvas is zy plane at x=0] (grid_yolo_1) at (image_yolo_83) {\drawgrid{0.25}{0.25}{1.0}};
 \node[draw=black,ultra thick,inner sep=2.5cm,rectangle] (rectangle) at (image_yolo) {};
+\node[anchor=north] at (rectangle.south) {$13\times13$ grid};
 \draw[ultra thick] (circle.south east) -- (rectangle.north);
-\end{tikzpicture}
 
+\end{tikzpicture}
 \end{document}

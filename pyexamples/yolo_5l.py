@@ -2,6 +2,7 @@ import sys
 sys.path.append('../')
 from pycore.tikzeng import *
 from pycore.blocks import *
+from pycore.execute import *
 
 
 # TODO:
@@ -14,17 +15,19 @@ from pycore.blocks import *
 #   documentation LaTeX code
 #   \node[canvas is zy plane at x=16] (image2) at (3,0,9) {\includegraphics[width=2cm,height=2cm]{../examples/fcn8s/cats.jpg}};
 
-def creatArchitecture(arch):
+def creatArchitecture():
     input = 40
+    arch = []
     arch += to_Start()
-    arch += to_Image(name='image_0', file='\\input_image', to=('-3,0,0'), size=[10, 10])
-    # arch += to_ConvRelu(name='conv_0', s_filter='I', size=(input, input), caption='1', n_filter=32)
+    arch += to_Image(name='image_0', file='\\input_image', to=('-4,0,0'), size=[10, 10])
     arch += to_ConvRelu(name='conv_0', s_filter='I', size=(input, input), caption='0', n_filter=32)
+    arch += to_ShortConnection(of='image_0', to='conv_0', anchor_of='', anchor_to='-west')
     arch += [*block_MultiConvRelu(num=3, name='conv', prev='conv_0', layer_num=1, name_start=1, n_filter=[64, 32, 64], s_filter='I/2', offset = '(3,0,0)', scale=16, size=(input/2, input/2), conn=True)]
     arch += to_Resample('conv_0', 'conv_1')
     # shortcut1
-    arch += [*block_Shortcut(name='short_4', prev='conv_3', offset='(1.5,0,0)', size=(input/2, input/2), caption='4'), to_LongConnection('conv_1', 'short_4', pos=1.3, anchor_to='-northwest')]
-    arch += block_MultiConvRelu(num=3, name='conv', prev='short_4', layer_num=5, name_start=5, n_filter=[128, 64, 128], size=(input/4, input/4), conn=True)
+    arch += [*block_Shortcut(name='short_4', prev='conv_3', offset='(1.75,0,0)', size=(input/2, input/2), caption='4'),
+    to_ShortConnection(of='conv_3', to='short_4'), to_LongConnection('conv_1', 'short_4', pos=1.3, anchor_to='-northwest')]
+    arch += block_MultiConvRelu(num=3, name='conv', prev='short_4', layer_num=5, name_start=5, n_filter=[128, 64, 128], size=(input/4, input/4), conn=True, offset='(1.5,0,0)')
     # downsample
     arch += to_Resample(of='short_4', to='conv_5')
     arch += [*block_Shortcut(name='short_8', prev='conv_7', size=(input/4, input/4), caption='8', s_filter='I/4'), to_LongConnection('conv_5', 'short_8', pos=1.5), to_ShortConnection(of='conv_7', to='short_8')]
@@ -87,11 +90,11 @@ def creatArchitecture(arch):
     arch += [*block_Conc(name='conc_122', prev='conv_121', offset='(1.5,0,0)')]
     arch += to_LongConnection(of='short_4', to='conc_122', pos=1.5, anchor_of_1='-southeast', anchor_of_2='-northeast')
     # fith yolo layer
-    arch += [*block_ConvRelu(name='conv_126', prev='conc_122', n_filter=(128), size=(input/2, input/2), caption='126', offset='(1.5,0,0)')]
+    arch += [*block_ConvRelu(name='conv_126', prev='conc_122', n_filter=(128), size=(input/2, input/2), caption='126', offset='(2,0,0)')]
     arch += to_Ellipsis(of='conc_122', to='conv_126')
     arch += [*block_MultiConvReluZ(num=3, name='conv', prev='conv_126', layer_num=127, name_start=127,
     n_filter=[32, 64, 256], s_filter='I/2', size=(input/2, input/2), conn=True, offset=8)]
-    arch += [*block_Yolo(name='yolo_130', prev='conv_129', n_filter=(256), size=(input/2, input/2), caption='130', offset='(-0.5, 0, 8)', image=True, conn=True, grid=True, steps=16)]
+    arch += [*block_Yolo(name='yolo_130', prev='conv_129', n_filter=(256), size=(input/2, input/2), caption='130', offset='(-0.5, 0, 8)', image=True, conn=True, grid=True, steps=20)]
     # arch += block_Shortcut
     arch += to_Legend()
     # arch += [*block_Conv(name='conv_80', prev='conv_79', s_filter='I/32', n_filter=(512), offset='(1,0,1)', size=(1, 1), caption='80')]
@@ -101,10 +104,16 @@ def creatArchitecture(arch):
 
 
 def main():
-    namefile = str(sys.argv[0]).split('.')[0]
-    arch = []
-    creatArchitecture(arch)
-    to_Generate(arch, namefile + '.tex')
+    try:
+        namefile = str(sys.argv[0]).split('.')[0]
+        arch = creatArchitecture()
+        # to_Generate(arch, namefile + '.tex')
+        content = buildArchitecture(arch)
+        writeTex(content, namefile + ".tex")
+        texToPDF(namefile + ".tex")
+        openPDF("xdg-open", namefile + ".pdf")
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
 
 
 if __name__ == '__main__':

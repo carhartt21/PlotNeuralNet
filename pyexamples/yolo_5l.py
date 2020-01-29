@@ -23,7 +23,7 @@ def creatArchitecture(arch):
     arch += [*block_MultiConvRelu(num=3, name='conv', prev='conv_0', layer_num=1, name_start=1, n_filter=[64, 32, 64], s_filter='I/2', offset = '(3,0,0)', scale=16, size=(input/2, input/2), conn=True)]
     arch += to_Resample('conv_0', 'conv_1')
     # shortcut1
-    arch += [*block_Shortcut(name='short_4', prev='conv_3', offset='(1.5,0,0)', size=(input/2, input/2), caption='4'), to_LongConnection('conv_1', 'short_4', pos=1.5, anchor_to='-northwest')]
+    arch += [*block_Shortcut(name='short_4', prev='conv_3', offset='(1.5,0,0)', size=(input/2, input/2), caption='4'), to_LongConnection('conv_1', 'short_4', pos=1.3, anchor_to='-northwest')]
     arch += block_MultiConvRelu(num=3, name='conv', prev='short_4', layer_num=5, name_start=5, n_filter=[128, 64, 128], size=(input/4, input/4), conn=True)
     # downsample
     arch += to_Resample(of='short_4', to='conv_5')

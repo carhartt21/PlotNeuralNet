@@ -83,3 +83,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+pyexamples/yolo_5l.pdf
+
+*.pdf

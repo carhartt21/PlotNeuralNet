@@ -1,4 +1,4 @@
-import os, warnings
+import os
 
 
 def listToString(list):

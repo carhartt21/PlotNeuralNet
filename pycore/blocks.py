@@ -1,4 +1,4 @@
-import tikz
+import pycore.tikz as tikz
 from math import log
 
 

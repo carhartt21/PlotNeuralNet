@@ -1,10 +1,9 @@
 import sys
-
+sys.path.insert(0, '..')
 import pycore.blocks as blocks
 import pycore.execute as execute
 import pycore.tikz as tikz
 
-sys.path.append('../')
 
 
 # TODO:
@@ -21,7 +20,7 @@ sys.path.append('../')
 def creat_architecture():
     input = 40
     arch = []
-    arch += blocks.start()
+    arch += tikz.start()
     arch += blocks.image(name='image_0', file='\\input_image', to=('-4,0,0'), size=[10, 10])
     arch += blocks.conv_relu(name='conv_0', s_filter='I', size=(input, input), caption='0', n_filter=32)
     arch += tikz.short_connection(of='image_0', to='conv_0', anchor_of='', anchor_to='-west')

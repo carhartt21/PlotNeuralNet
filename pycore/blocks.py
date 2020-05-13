@@ -100,7 +100,7 @@ def conv_pool(name, prev='', s_filter=256, n_filter=64, offset=(1, 0, 0), size=(
 def multi_conv(num, name, prev, layer_num=0, s_filter=256, n_filter=64, scale=32, name_start=0, offset=(1, 0, 0),
                width='0', size=(32, 32), opacity=0.5, conn=False, anchor='-east'):
 
-    """ 
+    """
     Generate a block of multiple convolution layers
 
     Arguments:
@@ -177,7 +177,7 @@ def multi_conv(num, name, prev, layer_num=0, s_filter=256, n_filter=64, scale=32
 
 def multi_conv_z(num, name, prev, layer_num=0, s_filter=256, n_filter=64, name_start=0,
                  offset=(1, 0, 0), width='0', size=(32, 32), opacity=0.5, conn=False, anchor='-east'):
-                 
+
     """
     Generate a block of multiple convolution layers along the z axis
 
@@ -251,7 +251,7 @@ def multi_conv_z(num, name, prev, layer_num=0, s_filter=256, n_filter=64, name_s
     layers += layer
     return layers
 
-def conv_relu(name, prev='', s_filter=256, n_filter=64, offset=(1, 0, 0), size=(32, 32), width=0, 
+def conv_relu(name, prev='', s_filter=256, n_filter=64, offset=(1, 0, 0), size=(32, 32), width=0,
               caption='', conn=False, anchor='-east'):
 
     """Generate convolution layer with relu activation
@@ -288,7 +288,7 @@ def conv_relu(name, prev='', s_filter=256, n_filter=64, offset=(1, 0, 0), size=(
         caption=caption,
         to='{}{}'.format(prev, anchor),
         width=width,
-        size=size,
+        size=size
     )
     if conn:
         layer += tikz.short_connection('{}'.format(prev), '{}'.format(name))
@@ -323,12 +323,12 @@ def multi_conv_relu(num, name, prev, layer_num=0, s_filter=256, n_filter=64, nam
 
     layers = []
     j = 0
-    layers = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
+    layer_names = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
     if not isinstance(n_filter, list):
         n_filter = [n_filter] * num
     # first layer
     layer = [tikz.conv_relu(
-        name='{}'.format(layers[0]),
+        name='{}'.format(layer_names[0]),
         caption=str(layer_num + j),
         offset=offset,
         to='{}{}'.format(prev, anchor),
@@ -343,7 +343,7 @@ def multi_conv_relu(num, name, prev, layer_num=0, s_filter=256, n_filter=64, nam
     prev = layers[0]
 
     # middle layers
-    for l_name in layers[1:-1]:
+    for l_name in layer_names[1:-1]:
         layer = [tikz.conv_relu(
             name='{}'.format(l_name),
             caption=str(layer_num + j),
@@ -358,7 +358,7 @@ def multi_conv_relu(num, name, prev, layer_num=0, s_filter=256, n_filter=64, nam
         j += 1
     # last layer
     layer = [tikz.conv_relu(
-        name='{}'.format(layers[-1]),
+        name='{}'.format(layer_names[-1]),
         caption=str(layer_num + j),
         offset='(0,0,0)',
         to='{}{}'.format(prev, anchor),
@@ -399,7 +399,7 @@ def multi_conv_relu_z(num, name, prev, layer_num=0, s_filter=256, n_filter='', n
 
     layers = []
     j = 0
-    layers = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
+    layer_names = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
     if not isinstance(n_filter, list):
         n_filter = [n_filter] * num
     if isinstance(offset, int):
@@ -408,7 +408,7 @@ def multi_conv_relu_z(num, name, prev, layer_num=0, s_filter=256, n_filter='', n
         offset_str = offset
     # first layer
     layer = [tikz.conv_relu(
-        name='{}'.format(layers[0]),
+        name='{}'.format(layer_names[0]),
         offset=offset_str,
         to='{}{}'.format(prev, anchor),
         size=size,
@@ -421,7 +421,7 @@ def multi_conv_relu_z(num, name, prev, layer_num=0, s_filter=256, n_filter='', n
     prev = layers[0]
 
     # middle layers
-    for l_name in layers[1:-1]:
+    for l_name in layer_names[1:-1]:
         layer = [tikz.conv_relu(
             name='{}'.format(l_name),
             offset=offset_str,
@@ -436,7 +436,7 @@ def multi_conv_relu_z(num, name, prev, layer_num=0, s_filter=256, n_filter='', n
         prev = l_name
     # last layer
     layer = [tikz.conv_relu(
-        name='{}'.format(layers[-1]),
+        name='{}'.format(layer_names[-1]),
         caption=str(layer_num + j),
         offset=offset_str,
         to='{}{}'.format(prev, anchor),
@@ -619,9 +619,9 @@ def yolo(name, prev='', s_filter='', n_filter=64, offset='(-1,0,4)', size=[32, 3
         size=size
     )
     if image:
-        layer += image('image_{}'.format(name), path, to=(name + anchor), size=[(size[0] / 5), (size[1] / 5)])
+        layer += tikz.image('image_{}'.format(name), path, to=(name + anchor), size=[(size[0] / 5), (size[1] / 5)])
     if grid:
-        layer += grid('grid_{}'.format(name), 'image_{}'.format(name), size=[(size[0] / 5), (size[1] / 5)], steps=steps)
+        layer += tikz.grid('grid_{}'.format(name), 'image_{}'.format(name), size=[(size[0] / 5), (size[1] / 5)], steps=steps)
     if conn:
         layer += tikz.short_connection('{}'.format(prev), '{}'.format(name), anchor_of='-near', anchor_to='-far')
     return layer

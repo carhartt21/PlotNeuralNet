@@ -10,10 +10,10 @@ def deleteFiles(files):
     Cmd += " " + files
     callProcessWithCommand(Cmd)
 
-def openPDF(tool, pdf = "file.pdf"):
+def openPDF(tool, pdf="file.pdf"):
     callProcessWithCommand(tool + " " + pdf)
 
-def texToPDF(tex = "file.tex", deleteTmpFiles = True):
+def texToPDF(tex="file.tex", deleteTmpFiles=True):
     callProcessWithCommand('pdflatex ' + str(tex))
     if deleteTmpFiles:
         deleteFiles("*.aux *.log")

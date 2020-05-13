@@ -105,7 +105,7 @@ def conv(name, s_filter='', n_filter=(64, 64), offset='(0,0,0)', to='0,0,0', wid
 
 
 # Conv,relu
-def conv_relu(name, s_filter='', n_filter='', offset='(0,0,0)', to='0,0,0', width=(2), size=(40, 40), caption=' '):
+def conv_relu(name, s_filter='', n_filter='', offset=(0, 0, 0), to='0,0,0', width=(2), size=(40, 40), caption=' '):
     if isinstance(width, list):
         if(len(n_filter) != len(width)):
             raise Exception("Size of n_filters does not match size of width")
@@ -115,7 +115,7 @@ def conv_relu(name, s_filter='', n_filter='', offset='(0,0,0)', to='0,0,0', widt
         xlabel_string = str(n_filter)
         width_string = str(width)
     return r'''
-\pic[shift={''' + offset + '''}] at (''' + to + ''')
+\pic[shift={''' + str(offset) + '''}] at (''' + to + ''')
     {RightBandedBox={
         name=''' + name + ''',
         caption=''' + caption + ''',
@@ -131,10 +131,10 @@ def conv_relu(name, s_filter='', n_filter='', offset='(0,0,0)', to='0,0,0', widt
 '''
 
 # Conv,relu
-def upsample(name, s_filter='', n_filter=(), offset='(0,0,0)', to='0,0,0', width=(2),
+def upsample(name, s_filter='', n_filter=(), offset=(0,0,0), to='0,0,0', width=(2),
              size_1=(40, 40), size_2=(80, 80), caption=' '):
     return r'''
-\pic[shift={''' + offset + '''}] at (''' + to + ''')
+\pic[shift={''' + str(offset) + '''}] at (''' + to + ''')
     {Box={
         name=''' + name + '''_0,
         fill=\\UpsampleColor,
@@ -143,7 +143,7 @@ def upsample(name, s_filter='', n_filter=(), offset='(0,0,0)', to='0,0,0', width
         width={1}
         }
     };
-\pic[shift={''' + offset + '''}] at (''' + name + '''_0-east)
+\pic[shift={''' + str(offset) + '''}] at (''' + name + '''_0-east)
     {Box={
         name=''' + name + ''',
         fill=\\UpsampleColor,

@@ -30,9 +30,9 @@ def main():
     try:
         namefile = str(sys.argv[0]).split('.')[0]
 
-        content = buildArchitecture(arch)
-        writeTex(content, namefile + ".tex")
-        texToPDF(namefile + ".tex")
+        content = build_architecture(arch)
+        write_tex(content, namefile + ".tex")
+        tex_to_pdf(namefile + ".tex")
 
         openPDF("SumatraPDF", namefile + ".pdf")
     except:

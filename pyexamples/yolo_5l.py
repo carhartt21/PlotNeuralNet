@@ -16,12 +16,12 @@ import pycore.tikz as tikz
 #   \node[canvas is zy plane at x=16] (image2) at (3,0,9)
 #   {\includegraphics[width=2cm,height=2cm]{../examples/fcn8s/cats.jpg}};
 
-def creat_architecture():
+def create_architecture():
     input = 40
     arch = []
     arch += tikz.start()
     arch += tikz.image(name='image_0', file='\\input_image', to=('-4,0,0'), size=(10, 10))
-    arch += blocks.conv_relu(name='conv_0', prev='image_0', s_filter='I', size=(input, input), caption='0', n_filter=32, anchor='.east')
+    arch += blocks.conv_relu(name='conv_0', prev='0,0,0', s_filter='I', size=(input, input), caption='0', n_filter=32, anchor='')
     arch += tikz.short_connection(of='image_0', to='conv_0', anchor_of='', anchor_to='-west')
     arch += [*blocks.multi_conv_relu(num=3, name='conv', prev='conv_0', layer_num=1, name_start=1,
              n_filter=[64, 32, 64], s_filter='I/2', offset='(3,0,0)', size=(input / 2, input / 2),
@@ -122,16 +122,14 @@ def creat_architecture():
 
 
 def main():
-    try:
-        namefile = str(sys.argv[0]).split('.')[0]
-        arch = creat_architecture()
-        # to_Generate(arch, namefile + '.tex')
-        content = execute.buildArchitecture(arch)
-        execute.writeTex(content, namefile + ".tex")
-        execute.texToPDF(namefile + ".tex")
+    namefile = str(sys.argv[0]).split('.')[0]
+    arch = create_architecture()
+    content = execute.build_architecture(arch)
+    execute.write_tex(content, namefile + ".tex")
+    if build_pdf:
+        execute.tex_to_pdf(namefile + ".tex")
         execute.openPDF("xdg-open", namefile + ".pdf")
-    except Exception:
-        print("Unexpected error:", sys.exc_info()[0])
+
 
 if __name__ == '__main__':
     main()

@@ -131,7 +131,7 @@ def conv_relu(name, s_filter='', n_filter='', offset=(0, 0, 0), to='0,0,0', widt
 '''
 
 # Conv,relu
-def upsample(name, s_filter='', n_filter=(), offset=(0,0,0), to='0,0,0', width=(2),
+def upsample(name, s_filter='', n_filter=(), offset=(0, 0, 0), to='0,0,0', width=(2),
              size_1=(40, 40), size_2=(80, 80), caption=' '):
     return r'''
 \pic[shift={''' + str(offset) + '''}] at (''' + to + ''')
@@ -287,8 +287,8 @@ def shortcut(name, s_filter='', n_filter=(64, 64), offset='(0,0,0)', to='0,0,0',
     {Box={
         name=''' + name + ''',
         caption=''' + caption + ''',
-        zlabel=''' + str(s_filter) + ''',
-        fill=\\ShortcutColor,
+        zlabel=''' + str(s_filter) + r''',
+        fill=\ShortcutColor,
         height=''' + str(size[0]) + ''',
         depth=''' + str(size[1]) + ''',
         width={''' + width_string + '''}
@@ -300,7 +300,7 @@ def shortcut(name, s_filter='', n_filter=(64, 64), offset='(0,0,0)', to='0,0,0',
 # Short straight connection
 def short_connection(of, to, anchor_of='-east', anchor_to='-west'):
     return r'''
-\draw [connection] (''' + of + anchor_of + ''') -- node {\\midarrow} (''' + to + anchor_to + ''');
+\draw [connection] (''' + of + anchor_of + r''') -- node {\midarrow} (''' + to + anchor_to + ''');
 '''
 
 
@@ -311,8 +311,8 @@ def long_connection(of, to, pos=1.25, anchor_of_1='-south', anchor_of_2='-north'
 \path (''' + of + '''-dummy |- ''' + to + anchor_to + ''') coordinate (''' + to + r'''-dummy)  ;
 
 \draw [connection] (''' + of + anchor_of_2 + ''')
--- node {}(''' + of + anchor_of_2 + ''' |- ''' + of + '''-dummy)
--- node {\\midarrow}(''' + of + '''-dummy -| ''' + to + anchor_to + ''')
+-- node {}(''' + of + anchor_of_2 + ''' |- ''' + of + r'''-dummy)
+-- node {\midarrow}(''' + of + '''-dummy -| ''' + to + anchor_to + ''')
 -- node {}(''' + to + anchor_to + ''');
 '''
 
@@ -322,10 +322,10 @@ def skip(of, to, pos=1.25):
     return r'''
 \path (''' + of + '''-southeast) -- (''' + of + '''-northeast) coordinate[pos=''' + str(pos) + '''] (''' + of + r'''-top) ;
 \path (''' + to + '''-south)  -- (''' + to + '''-north)  coordinate[pos=''' + str(pos) + '''] (''' + to + r'''-top) ;
-\draw [copyconnection]  (''' + of + '''-northeast)
--- node {\\copymidarrow}(''' + of + '''-top)
--- node {\\copymidarrow}(''' + to + '''-top)
--- node {\\copymidarrow} (''' + to + '''-north);
+\draw [copyconnection]  (''' + of + r'''-northeast)
+-- node {\copymidarrow}(''' + of + r'''-top)
+-- node {\copymidarrow}(''' + to + r'''-top)
+-- node {\copymidarrow} (''' + to + '''-north);
 '''
 
 

@@ -127,12 +127,12 @@ def multi_conv(num, name, prev, layer_num=0, s_filter=256, n_filter=64, scale=32
 
     layers = []
     j = 0
-    layers = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
+    layer_names = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
     if not isinstance(n_filter, list):
         n_filter = [n_filter] * num
     # first layer
     layer = [tikz.conv(
-             name='{}'.format(layers[0]),
+             name='{}'.format(layer_names[0]),
              caption=str(layer_num + j),
              offset=offset,
              to='{}{}'.format(prev, anchor),
@@ -143,11 +143,11 @@ def multi_conv(num, name, prev, layer_num=0, s_filter=256, n_filter=64, scale=32
     j += 1
     layers = layer
     if conn:
-        layers += tikz.short_connection(prev, layers[0])
-    prev = layers[0]
+        layers += tikz.short_connection(prev, layer_names[0])
+    prev = layer_names[0]
 
     # middle layers
-    for l_name in layers[1:-1]:
+    for l_name in layer_names[1:-1]:
         layer = [tikz.conv(
             name='{}'.format(l_name),
             caption=str(layer_num + j),
@@ -163,7 +163,7 @@ def multi_conv(num, name, prev, layer_num=0, s_filter=256, n_filter=64, scale=32
 
     # last layer
     layer = [tikz.conv(
-        name='{}'.format(layers[-1]),
+        name='{}'.format(layer_names[-1]),
         caption=str(layer_num + j),
         offset='(0,0,0)',
         to='{}{}'.format(prev, anchor),
@@ -204,12 +204,12 @@ def multi_conv_z(num, name, prev, layer_num=0, s_filter=256, n_filter=64, name_s
 
     layers = []
     j = 0
-    layers = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
+    layer_names = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
     if not isinstance(n_filter, list):
         n_filter = [n_filter] * num
     # first layer
     layer = [tikz.conv(
-        name='{}'.format(layers[0]),
+        name='{}'.format(layer_names[0]),
         caption=str(layer_num + j),
         offset=offset,
         to='{}{}'.format(prev, anchor),
@@ -220,11 +220,11 @@ def multi_conv_z(num, name, prev, layer_num=0, s_filter=256, n_filter=64, name_s
     j += 1
     layers = layer
     if conn:
-        layers += tikz.long_connection(prev, layers[0])
-    prev = layers[0]
+        layers += tikz.long_connection(prev, layer_names[0])
+    prev = layer_names[0]
 
     # middle layers
-    for l_name in layers[1:-1]:
+    for l_name in layer_names[1:-1]:
         layer = [tikz.conv(
             name='{}'.format(l_name),
             caption=str(layer_num + j),
@@ -239,7 +239,7 @@ def multi_conv_z(num, name, prev, layer_num=0, s_filter=256, n_filter=64, name_s
         j += 1
     # last layer
     layer = [tikz.conv(
-        name='{}'.format(layers[-1]),
+        name='{}'.format(layer_names[-1]),
         caption=str(layer_num + j),
         offset=offset,
         to='{}{}'.format(prev, anchor),
@@ -323,7 +323,7 @@ def multi_conv_relu(num, name, prev, layer_num=0, s_filter=256, n_filter=64, nam
 
     layers = []
     j = 0
-    layer_names = [*['{}_{}'.format(name, i)for i in range(name_start, num + name_start)]]
+    layer_names = [*['{}_{}'.format(name, i) for i in range(name_start, num + name_start)]]
     if not isinstance(n_filter, list):
         n_filter = [n_filter] * num
     # first layer
@@ -339,8 +339,8 @@ def multi_conv_relu(num, name, prev, layer_num=0, s_filter=256, n_filter=64, nam
     j += 1
     layers = layer
     if conn:
-        layers += tikz.short_connection(prev, layers[0])
-    prev = layers[0]
+        layers += tikz.short_connection(prev, layer_names[0])
+    prev = layer_names[0]
 
     # middle layers
     for l_name in layer_names[1:-1]:
@@ -417,8 +417,8 @@ def multi_conv_relu_z(num, name, prev, layer_num=0, s_filter=256, n_filter='', n
     j += 1
     layers = layer
     if conn:
-        layers += tikz.short_connection(of=prev, to=layers[0], anchor_of='-near', anchor_to='-far')
-    prev = layers[0]
+        layers += tikz.short_connection(of=prev, to=layer_names[0], anchor_of='-near', anchor_to='-far')
+    prev = layer_names[0]
 
     # middle layers
     for l_name in layer_names[1:-1]:
@@ -447,7 +447,7 @@ def multi_conv_relu_z(num, name, prev, layer_num=0, s_filter=256, n_filter='', n
     )]
     layers += layer
     if conn:
-        layers += tikz.short_connection(of=prev, to=layers[-1], anchor_of='-near', anchor_to='-far')
+        layers += tikz.short_connection(of=prev, to=layer_names[-1], anchor_of='-near', anchor_to='-far')
     return layers
 
 
@@ -525,7 +525,7 @@ def block_unconv(name, bottom, top, s_filter=256, n_filter=64, offset=(1, 0, 0),
 def res(num, name, bottom, top, start_no=0, s_filter=256, n_filter=64,
         offset=(0, 0, 0), size=(32, 32, 3.5), opacity=0.5):
     layers = []
-    layers = [*['{}_{}'.format(name, i)for i in range(num - 1)], top]
+    layer_names = [*['{}_{}'.format(name, i)for i in range(num - 1)], top]
     for name in layers:
         layer = [tikz.conv(
             name='{}'.format(name),
@@ -544,7 +544,7 @@ def res(num, name, bottom, top, start_no=0, s_filter=256, n_filter=64,
         layers += layer
 
     layers += [
-        tikz.skip(of=layers[1], to=layers[-2], pos=1.25),
+        tikz.skip(of=layer_names[1], to=layer_names[-2], pos=1.25),
     ]
     return layers
 

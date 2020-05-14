@@ -1,4 +1,6 @@
-import sys, subprocess, os
+import sys
+import subprocess
+import os
 
 def call_process(cmd):
     subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -16,10 +18,10 @@ def open_pdf(tool, pdf="file.pdf"):
     except subprocess.CalledProcessError:
         print('Error while trying to open pdf viewer')
 
-def tex_to_pdf(file="file.tex", folder='output', deleteTmpFiles=True):
+def tex_to_pdf(file="file.tex", folder='output', delete_tmp=True):
     os.chdir(folder)
     call_process('pdflatex ' + str(file))
-    if deleteTmpFiles:
+    if delete_tmp:
         delete_files("*.aux *.log")
     os.chdir('..')
 

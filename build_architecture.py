@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     parser_ = argparse.ArgumentParser(description='Parameters')
 
-    parser_.add_argument('--arch', type=str, default='yolo_5l',
+    parser_.add_argument('--arch', type=str, default='HRNet',
                          help='The architecture to build.')
     parser_.add_argument('--pdf', type=bool, default=False,
                          help='Build and open pdf file')

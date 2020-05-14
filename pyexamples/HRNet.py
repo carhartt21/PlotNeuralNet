@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append('../')
+sys.path.append('..')
 import pycore.tikz as tikz
 import pycore.blocks as blocks
 import pycore.execute as execute
@@ -10,7 +10,8 @@ def create_architecture():
     arch = []
     arch += tikz.start()
     arch += tikz.image(name='image_0', file='\\input_image', to=('-4,0,0'), size=(10, 10))
-    arch += blocks.conv_relu(name='conv_0', prev='image_0')
+    arch += blocks.conv_relu(name='conv_0', prev='0,0,0', anchor='')
+    arch += tikz.env_end()
     return arch
 
 def main():

@@ -11,11 +11,17 @@
 \shade[ball color=\fill,opacity=\opacity] (0,0,0) circle (\r);
 \draw (0,0,0) circle [radius=\r] node[scale=4*\r] {\logo};
 
-\coordinate (\name-anchor) at ( 0 , 0  , 0) ;
-\coordinate (\name-east)   at ( \r, 0  , 0) ;
-\coordinate (\name-west)   at (-\r, 0  , 0) ;
-\coordinate (\name-north)  at ( 0 , \r , 0) ;
+\coordinate (\name-anchor) at ( 0, 0, 0) ;
+\coordinate (\name-east)   at ( \r, 0, 0) ;
+\coordinate (\name-west)   at (-\r, 0, 0) ;
+\coordinate (\name-north)  at ( 0, \r, 0) ;
 \coordinate (\name-south)  at ( 0 , -\r, 0) ;
+\coordinate (\name-northeast)   at ({\r*cos(45)}, {\r*cos(45)}, 0) ;
+\coordinate (\name-northwest)   at ({-\r*cos(45)}, {\r*cos(45)}, 0) ;
+\coordinate (\name-northnorthwest)   at ({-\r*cos(65)}, {\r*cos(30)}, 0) ;
+\coordinate (\name-southeast)   at ({\r*cos(45)}, {-\r*cos(45)}, 0) ;
+\coordinate (\name-southwest)   at ({-\r*cos(45)}, {-\r*cos(45)}, 0) ;
+\coordinate (\name-southsouthwest)   at ({-\r*cos(65)}, {-\r*cos(30)}, 0) ;
 
 \path (\name-south) + (0,-20pt) coordinate (caption-node) 
 edge ["\textcolor{black}{\bf \caption}"'] (caption-node); %Ball caption

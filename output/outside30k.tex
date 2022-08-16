@@ -1088,20 +1088,20 @@
 
         \draw [connection, ] (conv_68-west) -- node [fillwhite] {\midarrow}(soft_max-east);
 
-    \pic[shift={(-2, 0, 0)}] at (soft_max-west)
+    \pic[shift={(2, 0, 0)}] at (soft_max-west)
 		{Box={
             name=image_1,
             caption= ,
             zlabel=,
             fill=white,
             opacity=0.8,
-            height=10.0,
-            depth=10.0,
+            height=5.0,
+            depth=5.0,
             width=0.5
         }
     };
 
-    \pic[shift={(-4, 0, 0)}] at (image_1-west)
+    \pic[shift={(4, 0, 0)}] at (image_1-west)
     {Box={
         name=image_2,
         caption= ,
@@ -1149,7 +1149,7 @@
 
     \draw [connection, pos=0.8] (grid_3) -- node {} ++(7,0,0) -- node [fillwhite] {\midarrow} (dummy_mask) -- node {} ++(4, 0, 0) -- node {}(conv_68-far);
 
-        \pic[shift={(15, 0, 0)}] at (image_2-south)
+        \pic[shift={(0, -15, 0)}] at (0,0,0)
             {RightBandedBox={
                 name=legend_1,
                 fill=\ConvColor,
@@ -1194,19 +1194,8 @@
         };
         \node [shift={(0, -1.3, 0)}] at (legend_4-anchor) {\LARGE{Softmax layer}};
 
-        \pic[shift={(5, 0, 0)}] at (legend_4-west)
-        {Box={
-                name=legend_5,
-                fill=white,
-                height=5.0,
-                depth=5.0,
-                width={0.1}
-            }
-        };
-	 	\node[canvas is zy plane at x=0](grid_3) at (legend_5-east) {\drawcoloredgrid{1}{1}{0.33}{black}};    
-        \node [shift={(0, -1.3, 0)}] at (legend_5-anchor) {\LARGE{Spatial mask}};
 
-        \pic[shift={(5, 0, 0)}] at (legend_5-west)
+        \pic[shift={(5, 0, 0)}] at (legend_4-west)
         {Ball={
                 name=legend_6,
                 caption=,

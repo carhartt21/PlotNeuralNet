@@ -42,6 +42,7 @@
         \tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
 
         \node[canvas is zy plane at x=1] (image_0) at (-3,0,0) {\includegraphics[width=10cm ,height=10cm ]{\input_image}};
+        \node[canvas is zy plane at x=0](grid_3) at (image_0) {\drawcoloredgrid{10}{10}{3.3}{black}};
 
         \pic[shift={(1, 0, 0)}, ] at (0,0,0)
             {RightBandedBox={
@@ -612,7 +613,7 @@
     
     	\coordinate [shift={(3, 0, 0)}] (resnet_last_dummy) at (bottleneck_16_2-east);
     
-    	\coordinate [shift={(0, 0, 6)}] (resnet_connection_dummy) at (resnet_last_dummy);
+    	\coordinate [shift={(0.5, 0, 6)}] (resnet_connection_dummy) at (resnet_last_dummy);
     
         \draw [connection, ] (bottleneck_16_2-east) -- node [fillwhite] {\midarrow}(resnet_last_dummy);
 
@@ -749,11 +750,11 @@
     
     	\coordinate [shift={(5, 0, 0)}] (dummy_pool_1) at (pool_1-east);
     
-    	\coordinate [shift={(5, 0, 0)}] (dummy_pool_2) at (pool_2-east);
+    	\coordinate [shift={(5.5, 0, 0)}] (dummy_pool_2) at (pool_2-east);
     
-    	\coordinate [shift={(5, 0, 0)}] (dummy_pool_3) at (pool_3-east);
+    	\coordinate [shift={(6, 0, 0)}] (dummy_pool_3) at (pool_3-east);
     
-    	\coordinate [shift={(5, 0, 0)}] (dummy_pool_4) at (pool_4-east);
+    	\coordinate [shift={(6.5, 0, 0)}] (dummy_pool_4) at (pool_4-east);
     
         \draw [connection, ] (dummy_pool_1) -- node [fillwhite] {\midarrow}(pool_1-east);
 
@@ -763,17 +764,17 @@
 
         \draw [connection, ] (dummy_pool_3) -- node {} (dummy_pool_4) -- node [fillwhite] {\midarrow}(pool_4-east);
 
-        \draw [connection]  (resnet_last_dummy)    -- node {} ++(6, 0, 0) -- node {\midarrow} (dummy_pool_1);
+        \draw [connection]  (resnet_last_dummy)    -- node {} ++(5.4, 0, 0) -- node {\midarrow} (dummy_pool_1);
     
-        \draw [connection]  (conv_pool_1-west)    -- node {} ++(-2, 0, 0) -- node {\midarrow} (conc_1-northeast);
+        \draw [connection]  (conv_pool_1-west)    -- node {} ++(-2.25, 0, 0) -- node {\midarrow} (conc_1-northeast);
     
         \draw [connection]  (conv_pool_2-west)    -- node {} ++(0, 0, 0) -- node {\midarrow} (conc_1-east);
     
         \draw [connection]  (conv_pool_3-west)    -- node {} ++(0, 0, 0) -- node {\midarrow} (conc_1-southeast);
     
-        \draw [connection]  (conv_pool_4-west)    -- node {} ++(-2, 0, 0) -- node {\midarrow} (conc_1-southwest);
+        \draw [connection]  (conv_pool_4-west)    -- node {} ++(-1.5, 0, 0) -- node {\midarrow} (conc_1-southwest);
     
-        \draw [connection]  (resnet_connection_dummy)    -- node {} ++(-4.5, 0, 0) -- node {\midarrow} (conc_1-northwest);
+        \draw [connection]  (resnet_connection_dummy)    -- node {} ++(-5.5, 0, 0) -- node {\midarrow} (conc_1-northwest);
     
         \pic[shift={(-2.5, 0, 0)}, ] at (conc_1-west)
             {RightBandedBox={
@@ -805,7 +806,7 @@
                 }
             };
 
-        \pic[shift={(0, 0, 8)}, ] at (bottleneck_14_connection)
+        \pic[shift={(0.5, 0, 8)}, ] at (bottleneck_14_connection)
             {BandedBox={
                 name=conv_61,
                 caption= ,
@@ -821,7 +822,7 @@
 
         \draw [connection, ] (bottleneck_14_connection) -- node [fillwhite] {\midarrow}(conv_61-far);
 
-        \pic[shift={(-3, 2, 0)}] at (conv_60-east)
+        \pic[shift={(-2.6, 2, 0)}] at (conv_60-east)
             {Ball={
                 name=sum_1,
                 caption=,
@@ -834,7 +835,7 @@
     
         \draw [connection, ] (conv_61-near) -- node [fillwhite] {\midarrow}(sum_1-northeast);
 
-        \pic[shift={(-2.5, 0, 0)}] at (sum_1-west)
+        \pic[shift={(-2.8, 0, 0)}] at (sum_1-west)
             {Box={
                 name=up_1_0,
                 fill=\UpsampleColor,
@@ -879,7 +880,7 @@
 
         \draw [connection]  (conv_60-farwest)    -- node {} ++(-0.3, 0, -5) -- node {\midarrow} (sum_1-east);
     
-        \pic[shift={(0, 0, 8)}, ] at (bottleneck_8_connection)
+        \pic[shift={(0.25, 0, 8)}, ] at (bottleneck_8_connection)
             {BandedBox={
                 name=conv_63,
                 caption= ,
@@ -895,7 +896,7 @@
 
         \draw [connection, ] (bottleneck_8_connection) -- node [fillwhite] {\midarrow}(conv_63-far);
 
-        \pic[shift={(-3, 0, 0)}] at (up_1-east)
+        \pic[shift={(-2.75, 0, 0)}] at (up_1-east)
             {Ball={
                 name=sum_2,
                 caption=,
@@ -910,7 +911,7 @@
 
         \draw [connection, ] (up_1-west) -- node [fillwhite] {\midarrow}(sum_2-east);
 
-        \pic[shift={(-2.5, 0, 0)}] at (sum_2-west)
+        \pic[shift={(-2.75, 0, 0)}] at (sum_2-west)
             {Box={
                 name=up_2_0,
                 fill=\UpsampleColor,
@@ -1002,7 +1003,7 @@
 
         \draw [connection, ] (up_2-nearsouthwest) -- node  {\midarrow}(conv_66-far);
 
-        \pic[shift={(-0.75, 0, 6)}, ] at (sum_3-southwest)
+        \pic[shift={(-0.6, 0, 6)}, ] at (sum_3-southwest)
             {BandedBox={
                 name=up_3,
                 caption= ,
@@ -1037,7 +1038,7 @@
 
         \draw [connection]  (conv_66-near)    -- node {} ++(0, 0, 0) -- node {\midarrow} (conc_2-northeast);
     
-        \draw [connection]  (up_3-near)    -- node {} ++(0, 0, 6) -- node {\midarrow} (conc_2-west);
+        \draw [connection]  (up_3-near)    -- node {} ++(0.25, 0, 6) -- node {\midarrow} (conc_2-west);
     
         \pic[shift={(-4, 0, 8)}, ] at (conc_2-east)
             {LeftBandedBox={
@@ -1129,10 +1130,9 @@
     \pic[shift={(5, 0, 0)}] at (image_0.south east)
 	{Box={
 			name=spatial_mask,
-			caption= ,
 			zlabel=,
-			fill=white,
-			opacity=0.8,
+			fill=teal,
+			opacity=0.4,
 			height=15.0,
 			depth=15.0,
 			width=0.5
@@ -1147,7 +1147,7 @@
 
     \draw [connection, pos=0.8] (grid_3) -- node {} ++(7,0,0) -- node [fillwhite] {\midarrow} (dummy_mask) -- node {} ++(4, 0, 0) -- node {}(conv_68-far);
 
-        \pic[shift={(15, 0, 0)}] at (image_2-south)
+        \pic[shift={(20, 0, 0)}] at (image_2-south)
             {RightBandedBox={
                 name=legend_1,
                 fill=\ConvColor,
@@ -1192,19 +1192,20 @@
         };
         \node [shift={(0, -1.3, 0)}] at (legend_4-anchor) {\LARGE \bf{Softmax layer}};
 
-        \pic[shift={(5, 0, 0)}] at (legend_4-west)
-        {Box={
-                name=legend_5,
-                fill=white,
-                height=5.0,
-                depth=5.0,
-                width={0.1}
-            }
-        };
-	 	\node[canvas is zy plane at x=0](grid_3) at (legend_5-east) {\drawcoloredgrid{1}{1}{0.33}{black}};    
-        \node [shift={(0, -1.3, 0)}] at (legend_5-anchor) {\LARGE \bf{Spatial mask}};
+%        \pic[shift={(5, 0, 0)}] at (legend_4-west)
+%        {Box={
+%                name=legend_5,
+%                fill=teal,
+%                opacity=0.4,
+%                height=5.0,
+%                depth=5.0,
+%                width={0.1}
+%            }
+%        };
+%	 	\node[canvas is zy plane at x=0](grid_3) at (legend_5-east) {\drawcoloredgrid{1}{1}{0.33}{black}};    
+%        \node [shift={(0, -1.3, 0)}] at (legend_5-anchor) {\LARGE \bf{Spatial mask}};
 
-        \pic[shift={(5, 0, 0)}] at (legend_5-west)
+        \pic[shift={(5, 0, 0)}] at (legend_4-west)
         {Ball={
                 name=legend_6,
                 caption=,
@@ -1227,8 +1228,13 @@
             }
         };
         \node [shift={(0,-1.3,0)}] at (legend_7-anchor) {\LARGE \bf{Summation}};     
-
         
+        \node [align=center] at (20,-8.5) {\huge \bf Feature \\ \huge \bf fusion};
+        \node [align=center] at (25, 3.5) {\huge \bf \textit{ResNet}-Backbone};
+        \node [rotate=56.5] at (46.5,-9) {\huge \bf Multi-level pooling};
+        \node [anchor=north, align=center, shift={(0,-1.75)}] at (spatial_mask-near) {\huge \bf Spatial \\ \huge \bf Mask};
+
+
         
    
     

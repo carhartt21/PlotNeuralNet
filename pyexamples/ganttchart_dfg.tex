@@ -1,0 +1,55 @@
+\documentclass[border=8pt]{standalone}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{pgfgantt}
+\usepackage{graphicx} 
+
+\begin{document}
+		\begin{ganttchart}[		
+			x unit=0.36cm,
+			y unit chart=0.5cm,
+			vgrid={*{11}{dotted}, solid},
+			y unit title = 0.4cm,		
+			title height=1,
+			group label font=\small,
+			bar label font=\footnotesize,			
+			bar/.style={fill=MidnightBlue, rounded corners = 3pt},
+			]
+			{1}{36}
+			%		Title
+			\gantttitle{\textit{Years}}{36}\\	
+			\gantttitle{1}{12} \gantttitle{2}{12} \gantttitle{3}{12}\\
+			%		WP 1
+			\ganttgroup{WP 1: Data set/SotA}{1}{5} \\
+			\ganttbar{Task 1.1: Data set}{1}{3} \\
+			\ganttbar[bar/.append style={fill=Maroon!50}]{}{2}{3} \\
+			\ganttbar{Task 1.2: SotA}{2}{4} \\	
+			\ganttbar[bar/.append style={fill=Maroon!50}]{}{4}{7} \\										
+			%		WP 2
+			\ganttgroup{WP 2: Implementation}{5}{17} \\
+			\ganttbar{Task 2.1: Neural network}{5}{9}
+			\ganttbar{}{15}{17} \\
+			\ganttbar{Task 2.2: Quality}{10}{17} \\
+			\ganttbar{Task 2.3: User Study 1}{15}{17} \\	
+			\ganttbar[bar/.append style={fill=Maroon!50}]{}{13}{19} \\			
+			%		WP 3
+			\ganttgroup{WP 3: Plausibility}{17}{28} \\
+			\ganttbar{Task 3.1: Semantic features}{17}{21}
+			\ganttbar{}{26}{28} \\
+			\ganttbar{Task 3.2: Other features}{22}{28} \\	
+			\ganttbar{Task 3.3: User Study 2}{26}{28} \\	
+			\ganttbar[bar/.append style={fill=Maroon!50}]{}{25}{29} \\												
+			%		WP 4
+			\ganttgroup{WP 4: Scenarios}{29}{35} \\
+			\ganttbar{Task 4.1: Data augmentation}{29}{31} \\
+			\ganttbar{Task 4.2: Visualization}{32}{35} \\
+			\ganttbar[bar/.append style={fill=Maroon!50}]{}{31}{35} \\												
+			\ganttbar{\textbf{Report}}{36}{36}				
+			%  		Legend
+			\node [fill=MidnightBlue, anchor=north, minimum width=1cm, shift=({1,-0.25})] (phd) at (current bounding box.south west){};
+			\node [anchor=west] at (phd.east){Ph.D. candidate};						
+			\node [fill=Maroon!50, anchor=north, minimum width=1cm, shift=({0,-0.2})] (student) at (phd.south){};						
+			\node [anchor=west] at (student.east){Student assistant};	
+	\end{ganttchart}						
+\end{document}
+
+	

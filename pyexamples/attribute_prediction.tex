@@ -25,6 +25,14 @@
 \def\input_image{../examples/input_image.jpg}
 \def\output_image{../examples/output_image.png}
 
+\newcommand*{\drawMBoxes}[3]{%
+	\foreach \i in {0,1,...,#3} {
+		\draw [fill=white] (#1,#2-\i) rectangle (#1+1,#2-\i+1) node[pos=.5] {\Large $ p_{\i}$};
+	}%
+	\draw [fill=white] ({#1},{#2-(#3+1)}) rectangle ({#1+1},{#2-(#3+1)+1}) node[pos=.5] {\Large $\vdots$};
+	\draw [fill=white] ({#1},{#2-(#3+2)}) rectangle ({#1+1},{#2-(#3+2)+1}) node[pos=.5] {\Large $ p_{40} $};
+}%
+
 \newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++ (0.3,0);}
 
 \begin{document}
@@ -69,21 +77,23 @@
                 }
             };
 
+  \pic[shift={(2, 0, 0)}, ] at (pool_1-east)
+{RightBandedBox={
+		name=conv_2,
+		caption=,
+		xlabel={(96,)},
+		zlabel=I/2,
+		fill=\ConvColor,
+		bandfill=\ConvReluColor,
+		height=16.0,
+		depth=16.0,
+		width={3.292481250360578}
+	}
+};
+
+
         \draw [connection, ] (conv_1-east) -- node  {\midarrow}(pool_1-west);
 
-        \pic[shift={(2, 0, 0)}, ] at (pool_1-east)
-            {RightBandedBox={
-                name=conv_2,
-                caption=,
-                xlabel={(96,)},
-                zlabel=I/2,
-                fill=\ConvColor,
-                bandfill=\ConvReluColor,
-                height=16.0,
-                depth=16.0,
-                width={3.292481250360578}
-                }
-            };
 
         \draw[densely dashed]
             (pool_1-nearnortheast) coordinate(a) -- (conv_2-nearnorthwest)
@@ -260,7 +270,11 @@
             };
 
         \draw [connection, ] (fully_3-east) -- node  {\midarrow}(soft_max-west);
-
+        
+    	\drawMBoxes{25}{2.5}{4}	
+        
+        \draw [connection, ] (soft_max-east) -- node  {\midarrow}(25,0);
+        
         \end{tikzpicture}
         \end{document}
     

@@ -47,6 +47,7 @@ def def_colors():
 \def\ConcColor{rgb:red, 5}
 \def\input_image{../examples/input_image.jpg}
 \def\output_image{../examples/output_image.png}
+\def\skyseg{../examples/sky_segmentation.png}
 '''
 
 
@@ -118,9 +119,37 @@ def conv(name, z_label='', n_filter=(64, 64), offset=(0, 0, 0), to='0,0,0', widt
             };
 '''
 
+# fully_connected_convolution block
+def full_con(name, z_label='', n_filter=(64, 64), offset=(0, 0, 0), to='0,0,0', width=(2), size=[40, 40], caption=' '):
+    if isinstance(width, list):
+        if(len(n_filter) != len(width)):
+            raise Exception("Size of n_filters does not match size of width")
+        xlabel_string = list_to_string(n_filter)
+        width_string = list_to_string(width)
+    else:
+        width = log(n_filter)
+        xlabel_string = str(n_filter)
+        width_string = str(width)
+    return r'''
+        \pic[shift={''' + str(offset) + '''}] at (''' + to + ''')
+            {Box={
+                name=''' + name + ''',
+                caption=''' + caption + ''',
+                xlabel={(''' + xlabel_string + ''',)},
+                zlabel=''' + str(z_label) + ''',
+                fill=\\UpsampleColor,
+                height=''' + str(size[0]) + ''',
+                width=''' + width_string + ''',
+                depth={''' + str(size[1]) + '''}
+                }
+            };
+'''
+
+
+
 
 # Conv,relu
-def conv_relu(name, z_label='', n_filter='', offset=(0, 0, 0), to='0,0,0', width=(2), size=(40, 40), caption=' ', options=''):
+def conv_relu(name, z_label='', n_filter='', offset=(0, 0, 0), to='0,0,0', width=(2), size=(40, 40), caption=' ', label = True, options=''):
     if isinstance(width, list):
         if(len(n_filter) != len(width)):
             raise Exception("Size of n_filters does not match size of width")
@@ -129,6 +158,8 @@ def conv_relu(name, z_label='', n_filter='', offset=(0, 0, 0), to='0,0,0', width
     else:
         xlabel_string = str(n_filter)
         width_string = str(width)
+    if not label:
+        xlabel_string = ''
     return r'''
         \pic[shift={''' + str(offset) + '''}, ''' + options + '''] at (''' + to + ''')
             {RightBandedBox={
@@ -320,7 +351,6 @@ def conv_soft_max(name, z_label=40, offset=(0, 0, 0), to='(0,0,0)', width=1, hei
             {Box={
                 name=''' + name + ''',
                 caption=''' + caption + ''',
-                zlabel=''' + str(z_label) + ''',
                 fill=\\SoftmaxColor,
                 height=''' + str(height) + ''',
                 width=''' + str(width) + ''',
@@ -361,7 +391,6 @@ def soft_max(name, z_label='', n_filter=32, offset=(0, 0, 0), to='(0,0,0)', widt
             {Box={
                 name=''' + name + ''',
                 caption=''' + caption + ''',
-                xlabel={{'''+ str(n_filter) +''',}},
                 zlabel=''' + str(z_label) + ''',
                 fill=\\SoftmaxColor,
                 opacity=''' + str(opacity) + ''',
@@ -529,6 +558,22 @@ def resample(of, to):
     '''
 
 
+def full_connection(of, to):
+    return r'''
+        \draw[densely dashed]
+            (''' + of + '''-nearnortheast) -- (''' + to + '''-farnorthwest)
+            (''' + of + '''-nearnortheast) -- (''' + to + '''-nearnorthwest)
+            (''' + of + '''-farnortheast) -- (''' + to + '''-nearnorthwest)
+            (''' + of + '''-farnortheast) -- (''' + to + '''-farnorthwest)
+            (''' + of + '''-farnortheast) -- (''' + to + '''-nearsouthwest)
+            (''' + of + '''-nearsoutheast) -- (''' + to + '''-farsouthwest)
+            (''' + of + '''-nearsoutheast) -- (''' + to + '''-nearsouthwest)
+            (''' + of + '''-nearsoutheast) -- (''' + to + '''-farnorthwest)
+            (''' + of + '''-farsoutheast) --(''' + to + '''-nearsouthwest)
+            (''' + of + '''-farsoutheast) --(''' + to + '''-farsouthwest);
+'''
+
+
 def ellipsis(of, to, offset='(0.5,0,0)', name=''):
     return r'''
         \draw [connection] (''' + of + r'''-east) -- node [fill=white,inner sep=1pt, opacity=1]''' + name + '''{\ldots} (''' + to + '''-west);
@@ -544,20 +589,20 @@ def env_end():
 
 def results_upsampling():
     return r'''
-    \pic[shift={(-2, 0, 0)}] at (soft_max-west)
+    \pic[shift={(2, 0, 0)}] at (soft_max-west)
 		{Box={
             name=image_1,
             caption= ,
             zlabel=,
             fill=white,
             opacity=0.8,
-            height=10.0,
-            depth=10.0,
+            height=5.0,
+            depth=5.0,
             width=0.5
         }
     };
 
-    \pic[shift={(-4, 0, 0)}] at (image_1-west)
+    \pic[shift={(4, 0, 0)}] at (image_1-west)
     {Box={
         name=image_2,
         caption= ,
@@ -570,11 +615,11 @@ def results_upsampling():
         }
     };
 
-    \node[canvas is zy plane at x=0] (img_1) at (image_1-east) {\includegraphics[width=2cm,height=2cm]{\output_image}};
+    \node[canvas is zy plane at x=0] (img_1) at (image_1-east) {\includegraphics[width=2cm,height=2cm]{\skyseg}};
 
     \draw [connection] (soft_max-east) -- node [fillwhite] {\midarrow}(image_1-west);
 
-    \node[canvas is zy plane at x=0] (img_2) at (image_2-east) {\includegraphics[width=9cm ,height=9cm ]{\output_image}};
+    \node[canvas is zy plane at x=0] (img_2) at (image_2-east) {\includegraphics[width=9cm ,height=9cm ]{\skyseg}};
 
     \draw[densely dashed]
     (image_1-nearnortheast) coordinate(a) -- (image_2-nearnorthwest)
@@ -609,9 +654,14 @@ def spatial_mask():
     \draw [connection, pos=0.8] (grid_3) -- node {} ++(7,0,0) -- node [fillwhite] {\midarrow} (dummy_mask) -- node {} ++(4, 0, 0) -- node {}(conv_68-far);
 '''
 
+def text(shift=(0,0,0), of='', text=''):
+    return r'''
+        	\node [shift={'''+shift+''')}] at ('''+of+''') {\LARGE{'''+text+'''}};
+            '''
+
 def legend():
     return r'''
-        \pic[shift={(15, 0, 0)}] at (image_2-south)
+        \pic[shift={(0, -15, 0)}] at (0,0,0)
             {RightBandedBox={
                 name=legend_1,
                 fill=\ConvColor,
@@ -656,19 +706,8 @@ def legend():
         };
         \node [shift={(0, -1.3, 0)}] at (legend_4-anchor) {\LARGE{Softmax layer}};
 
-        \pic[shift={(5, 0, 0)}] at (legend_4-west)
-        {Box={
-                name=legend_5,
-                fill=white,
-                height=5.0,
-                depth=5.0,
-                width={0.1}
-            }
-        };
-	 	\node[canvas is zy plane at x=0](grid_3) at (legend_5-east) {\drawcoloredgrid{1}{1}{0.33}{black}};    
-        \node [shift={(0, -1.3, 0)}] at (legend_5-anchor) {\LARGE{Spatial mask}};
 
-        \pic[shift={(5, 0, 0)}] at (legend_5-west)
+        \pic[shift={(5, 0, 0)}] at (legend_4-west)
         {Ball={
                 name=legend_6,
                 caption=,

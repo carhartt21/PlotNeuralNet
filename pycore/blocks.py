@@ -85,11 +85,10 @@ def conv_pool(name, prev='', z_label='', n_filter=64, offset=(1, 0, 0), size=(32
     )
     layer += tikz.pool(
         name='{}'.format(name),
-        offset=(0, 0, 0),
-        to='{}-east'.format(name),
+        offset=(1, 0, 0),
+        to='{}'.format(name),
         width=1,
-        height=size[0] - int(size[0] / 4),
-        depth=size[1] - int(size[0] / 4),
+        size=size,
         opacity=opacity
     )
     if conn:
@@ -259,7 +258,7 @@ def multi_conv_z(num, name, prev, layer_num=0, z_label='', n_filter=64, name_sta
     return layers
 
 def conv_relu(name, prev='', z_label='', n_filter=64, offset=(1, 0, 0), size=(32, 32), width=0,
-              caption='', conn=True, anchor='-east', anchor_to='-west', rtl=False):
+              caption='', conn=True, anchor='-east', anchor_to='-west', rtl=False, label=True):
 
     """Generate convolution layer with relu activation
 
@@ -309,7 +308,8 @@ def conv_relu(name, prev='', z_label='', n_filter=64, offset=(1, 0, 0), size=(32
             caption=caption,
             to='{}{}'.format(prev, anchor),
             width=width,
-            size=size
+            size=size,
+            label=label
         )
     if conn:
         layer += tikz.short_connection('{}'.format(prev), '{}'.format(name), anchor_of=anchor, anchor_to=anchor_to)
@@ -361,7 +361,7 @@ def new_branch(name, prev='', z_label='', n_filter=64, offset=(1, 0, 0), size=(3
     return layer
 
 
-def multi_conv_relu(num, name, prev, layer_num=0, z_label='', n_filter=64, name_start=0, offset=(1, 0, 0),
+def multi_conv_relu(num, name, prev, layer_num=0, z_label='', n_filter=(64), name_start=0, offset=(1, 0, 0),
                     width=0, size=(32, 32), opacity=0.5, conn=True, anchor='-east'):
 
     """Generate multiple convolution layers with relu activation
@@ -615,7 +615,7 @@ def multi_conv_relu_z(num, name, prev, layer_num=0, z_label='', n_filter='', nam
 
 
 def upsample(name, prev='', z_label='', n_filter=64, offset=(1, 0, 0), size=(32, 32), width=0, opacity=0.5,
-             caption='', conn=True, anchor='-east', anchor_of='-west'):
+             caption='', conn=True, anchor='-west', anchor_of='-east'):
 
     """
     Generate upsampling layer

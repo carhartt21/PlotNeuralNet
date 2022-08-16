@@ -1,0 +1,78 @@
+\documentclass[border=8pt, multi, tikz]{standalone}
+\usepackage{import}
+\usepackage{graphicx}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows.meta}
+\subimport{../layers/}{init}
+
+\pgfmathdeclarerandomlist{MyRandomColors}{%
+	{white}%
+	{white}%  
+	{white}%  		  
+	{black}%
+	{white}%
+	{white}%
+	{white}%  
+	{white}%  
+	{white}%      
+}%
+
+% \ColorCells{start_x}{end_y}{start_y}{end_y}
+\newcommand*{\ColorCells}[4]{%
+	\foreach \y in {#3,...,#4} {
+		\foreach \x in {#1,...,#2} {
+			\pgfmathrandomitem{\RandomColor}{MyRandomColors} 
+			\draw [fill=\RandomColor, draw=none] 
+			(\x,\y) rectangle (\x+1,\y+1);
+		}%
+	}%
+}%
+
+% \drawMBoxes{start_x}{start_y}{number of boxes}
+\newcommand*{\drawMBoxes}[3]{%
+	\foreach \i in {0,1,...,#3} {
+		\draw [fill=lightgray] (#1+\i*2,#2) rectangle (#1+\i*2+2,#2+2) node[pos=.5] {\Huge $ m_{\i}$};
+		}%
+	\draw [fill=lightgray] ({#1+(#3+1)*2},#2) rectangle ({#1+(#3+1)*2+2},#2+2) node[pos=.5] {\Huge $\dots$};
+	\draw [fill=lightgray] ({#1+(#3+2)*2},#2) rectangle ({#1+(#3+2)*2+2},#2+2) node[pos=.5] {\Huge $ M $};
+}%
+
+\tikzstyle{arrow} = [-{Stealth[length=10mm, width=8mm]}, line width=4pt]
+\tikzstyle{dashedarrow} = [-{Stealth[length=10mm, width=8mm]}, dash pattern=on 15pt off 15pt, line width=3pt]
+\tikzstyle{thickdashed} = [dash pattern=on 15pt off 15pt, line width = 3pt]
+\tikzstyle{doublearrow} = [{Latex[length=4mm, width=4mm]}-{Latex[length=4mm, width=4mm]}, line width=2.5pt]
+\newcommand{\yOffset}{-30}
+\newcommand{\gridWidth}{20}
+\newcommand{\gridHeight}{15}
+
+\begin{document}
+	\begin{tikzpicture}
+	\ColorCells{5}{10}{0}{14}
+	\ColorCells{2}{14}{-30}{-16}
+	\draw[step=1cm,color=black](0,0) grid (\gridWidth, \gridHeight);
+	\draw[step=1cm,color=black, shift=({0,\yOffset})](0,0) grid (\gridWidth, \gridHeight);
+	\draw [arrow] (0,0) -- node [below, scale=1.5, at end, inner sep=10] {\Huge time} (\gridWidth+1,0);
+	\draw [arrow] (0,0) -- node [left, scale=1.5, at end] {\Huge m} (0,\gridHeight+1);
+	
+	\draw [arrow] (0,0+\yOffset) -- node [below, scale=1.5, at end, inner sep=10] {\Huge time} (\gridWidth+1,\yOffset);
+	\draw [arrow] (0,0+\yOffset) -- node [left, scale=1.5, at end] {\Huge m} (0,\gridHeight+\yOffset+1);
+	
+	\draw [dashedarrow] (5, \gridHeight) -- (5, -1.5);
+	\draw [dashedarrow] (11, \gridHeight) -- (11, -1.5);
+	
+	\draw [doublearrow] (5,-1.5) -- node [fill = white] {\Huge $ d_{sm} $} (11,-1.5);
+	
+	
+	\draw [thickdashed] (3, \yOffset-2) rectangle (8,\gridHeight+\yOffset+2);
+	\draw [thickdashed] (6, \yOffset-3) rectangle (12,\gridHeight+\yOffset+3);	
+	
+	\draw [doublearrow] (3, \yOffset-2.75) -- node [fill = white] {\Huge $ h_{smb} $} (6, \yOffset-2.75);
+%	\draw [doublearrow] (3, \yOffset-3) -- node [below] {\Huge $ h_{smb} $} (6, \yOffset-3); check if you like this more
+	\draw [doublearrow] (6, \yOffset-3.75) -- node [fill = white] (dsmb) {\Huge $ d_{smb} $} (12, \yOffset-3.75);
+	
+%	
+	\drawMBoxes{-40}{-25}{10}	
+	\draw [arrow] (dsmb) -- ++(0,-1) -| node [fill = white, scale=5, near start] (sum) {\Huge $ \sum$} (-25,-26);
+	\node [scale=1.5] at (sum.south) {\Huge time};
+	\end{tikzpicture}
+\end{document}

@@ -1,0 +1,99 @@
+\documentclass[border=8pt, multi, tikz]{standalone}
+\usepackage{import}
+\usepackage{graphicx}
+\usetikzlibrary{shapes, arrows}
+\subimport{../layers/}{init}
+
+\begin{document}
+	\begin{tikzpicture}
+	\tikzstyle{fillwhite} = [fill=white,inner sep=0pt, opacity=1]
+	\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+	
+	\pic[shift={(0, 0, 0)}] at (0,0,0)
+	{SolidBox={
+			name=generator,
+			label=\LARGE Generator,
+			fill=green,
+			height=15,
+			depth=15,
+			opacity=0.1,
+			width={20}
+		}
+	};
+
+	\node[shift={(-3.5,0,0)}, draw, thick, rectangle, minimum height=1 cm, minimum width=1 cm, align=center] (random) at (generator-west) {\large Random\\ \large input};
+	\draw [connection] (random) -- node [fillwhite] {\midarrow} (generator-west);
+
+	\pic[shift={(0, 11, 0)}] at (generator-north)
+	{SolidBox={
+			name=real_images,
+			fill=white,
+			height=15,
+			depth=15,
+			width={1,1}
+		}
+	};
+	
+	\pic[shift={(2, 0, 0)}] at (real_images-east)
+	{SolidBox={
+			name=real_images_2,
+			fill=white,
+			height=15,
+			depth=15,
+			width={1, 1}
+		}
+	};
+	\path (real_images-east) -- node (real) {$\dots$} (real_images_2-west);
+	\node [shift={(1.25,0,0)}, below] at (real_images-nearsouth) {\LARGE Real images};
+	
+		\pic[shift={(3, 0, 0)}] at (generator-east)
+		{SolidBox={
+			name=fake_image,
+			caption=\LARGE Fake image,
+			fill=white,
+			height=15,
+			depth=15,
+			width={1}
+			}
+		};
+	
+	\draw [connection] (generator-east) -- node [fillwhite] {\midarrow} (fake_image-west);
+	
+	\pic[shift={(5, 1, 0)}] at (fake_image-north)	
+	{SolidBox={
+			name=discriminator,
+			label=\LARGE Discriminator,
+			height=15,
+			depth=15,
+			width={20},
+			fill=red,
+			opacity=0.1
+		}
+	};	
+	
+	\node (dummy) [shift={(-2.5,0,0)}, inner sep=15] at (discriminator-west) {};
+	
+	\draw [connection] (fake_image-east) -| (dummy);
+	
+	\draw [connection] (real_images_2-east) -| (dummy) -- node [fillwhite] {\midarrow} (discriminator-west);
+	
+	\draw [connection] (dummy.south) -- (dummy.east);
+	\draw[ultra thick, draw=\edgecolor, <->, >=latex', shorten >= 3pt, shorten <= 3pt] (dummy.south) to [bend left](dummy.north);
+	\node[fill=\edgecolor, inner sep=2, circle] at (dummy.south) {};  
+	\node[fill=\edgecolor, fill, inner sep=2, circle] at (dummy.north) {};  
+	\node[fill=\edgecolor, fill, inner sep=2, circle] at (dummy.east) {};  
+	
+	
+	\node (real) [shift={(2,0.5,0)}, inner sep=0] at (discriminator-east) {\Large Real};
+	\node (fake) [shift={(2,-0.5,0)}, inner sep=0] at (discriminator-east) {\Large Fake};
+	\draw [connection] (discriminator-east) ++(0,0.5) -- ++(1,0) |- (real);
+	\draw [connection] (discriminator-east) ++(0,-0.5) -- ++(1,0) |- (fake);
+	\node [draw, diamond, thick, shift={(5,0,0)}, inner sep=1] (correct) at (discriminator-east) {\Large Correct?};
+	\draw [connection] (correct.west) -- ++(-0.25,0)  node [coordinate] (dummy_2) {} |- (real.east) ;
+	\draw [connection] (fake) -| (dummy_2);
+	
+	\draw [connection, dashed] (correct) -- ++(2,0) -- node [fillwhite, rotate=90, near start, inner sep=2] {\large no} ++(0,-1) -- node [fillwhite] {\midarrow} ++(0,-4)  |- node [fill=white, opacity=1, near end, rotate=180] {\Large\textit{Discriminator loss}} ++(-9,0) -| node [near end, fillwhite] {\midarrow} (discriminator-nearsouth);
+	
+	\draw [connection, dashed] (correct) ++(2,0) -- ++(1,0) -- node [fillwhite, rotate=90, pos=0.3, inner sep=2] {\large yes} ++(0,-1) -- node [fillwhite] {\midarrow} ++(0,-8) |- node [fill=white, opacity=1, rotate=180, near end] {\Large\textit{Generator loss}} ++(-20,0) -| node [near end, fillwhite] {\midarrow} (generator-nearsouth);
+	\end{tikzpicture}
+\end{document}

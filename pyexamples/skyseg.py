@@ -98,11 +98,12 @@ def create_architecture():
     arch += tikz.coordinate('dummy_pool_1', 'pool_1-east', (-2.5, 0, 0))
     arch += tikz.coordinate('dummy_pool_2', 'pool_2-east', (-2.5, 0, 0))
     arch += tikz.coordinate('dummy_pool_3', 'pool_3-east', (-2.5, 0, 0))
-    arch += tikz.coordinate('input', 'dummy_pool_2', (-4, 0, 0))
+    arch += tikz.coordinate('bn_input', 'dummy_pool_2', (-4, 0, 0))
 
     arch += tikz.short_connection('dummy_pool_2', 'dummy_pool_1', anchor_of='', anchor_to='')
     arch += tikz.short_connection('dummy_pool_2', 'dummy_pool_3', anchor_of='', anchor_to='')
-    arch += tikz.short_connection('input', 'dummy_pool_2', anchor_of='', anchor_to='')
+    # arch += tikz.short_connection('bn_input', 'dummy_pool_2', anchor_of='', anchor_to='')
+    arch += tikz.text(of='bn_input', text='\LARGE Feature Maps \\\ \LARGE from Backbone', options='align=left, anchor=east')
 
     # arch += tikz.coordinate('dummy_pool_4', 'pool_4-east', (-2.5, 0, 0))
 
@@ -180,9 +181,14 @@ def create_architecture():
     arch += tikz.short_connection('dummy_bn_1', 'sum_1', anchor_of='', anchor_to='-north')
     arch += tikz.short_connection('dummy_bn_2', 'sum_2', anchor_of='', anchor_to='-north')
     arch += tikz.short_connection('dummy_bn_3', 'sum_3', anchor_of='', anchor_to='-north')
-    arch += tikz.z_connection('input', 'dummy_bn_3', anchor_of='', anchor_to='', shift=(0, 0, -10))
+    arch += blocks.conc(name='conc_0', prev='bn_input', offset=(2, 0, 0), anchor_to='')
 
-
+    arch += tikz.text(of='conc_0-south', name='attr_input', shift=(0,0,8),
+                      text='\LARGE Feature Maps \\\ \LARGE Attribute Prediction', options='align=left, anchor=north')
+    arch += tikz.z_connection('conc_0', 'dummy_bn_3', anchor_of='-north', anchor_to='', shift=(0, 0, -10))
+    arch += tikz.short_connection('bn_input', 'conc_0', anchor_of='', anchor_to='-west')
+    arch += tikz.short_connection('attr_input', 'conc_0', anchor_of='', anchor_to='-south')
+    arch += tikz.short_connection('conc_0', 'dummy_pool_2', anchor_of='-east', anchor_to='')
 
 
     

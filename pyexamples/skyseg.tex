@@ -147,14 +147,14 @@
     
     	\coordinate [shift={(-2.5, 0, 0)}] (dummy_pool_3) at (pool_3-east);
     
-    	\coordinate [shift={(-4, 0, 0)}] (input) at (dummy_pool_2);
+    	\coordinate [shift={(-4, 0, 0)}] (bn_input) at (dummy_pool_2);
     
         \draw [connection, ] (dummy_pool_2) -- node [fillwhite] {\midarrow}(dummy_pool_1);
 
         \draw [connection, ] (dummy_pool_2) -- node [fillwhite] {\midarrow}(dummy_pool_3);
 
-        \draw [connection, ] (input) -- node [fillwhite] {\midarrow}(dummy_pool_2);
-
+        	\node [shift={(0, 0, 0))}, align=left, anchor=east] at (bn_input) () {\LARGE Feature Maps \\ \LARGE from Backbone};
+            
         \draw [connection, ] (dummy_pool_1) -- node [fillwhite] {\midarrow}(pool_1-west);
 
         \draw [connection, ] (dummy_pool_2) -- node {} (dummy_pool_2) -- node [fillwhite] {\midarrow}(pool_2-west);
@@ -375,8 +375,27 @@
 
         \draw [connection, ] (dummy_bn_3) -- node [fillwhite] {\midarrow}(sum_3-north);
 
-        \draw [connection] ++(1.5, 0, 0)  (input)    -- node {} ++(0, 0, -10) -- node {\midarrow} (dummy_bn_3);
+        \pic[shift={(2, 0, 0)}] at (bn_input)
+            {Ball={
+                name=conc_0,
+                caption=,
+                fill=\ConcColor,
+                opacity=0.6,
+                radius=2.5,
+                logo=$\oplus$
+                }
+            };
     
+        	\node [shift={(0, 0, 8))}, align=left, anchor=north] at (conc_0-southwest) (attr_input) {\LARGE Feature Maps \\ \LARGE Attribute Prediction};
+            
+        \draw [connection]  (conc_0-northeast)    -- node {} ++(0, 0, -10) -- node {\midarrow} (dummy_bn_3);
+    
+        \draw [connection, ] (bn_input) -- node [fillwhite] {\midarrow}(conc_0-west);
+
+        \draw [connection, ] (attr_input) -- node [fillwhite] {\midarrow}(conc_0-southwest);
+
+        \draw [connection, ] (conc_0-east) -- node [fillwhite] {\midarrow}(dummy_pool_2);
+
         \pic[shift={(2, 0, 0)}, ] at (conc_2-east)
             {RightBandedBox={
                 name=conv_67_2,

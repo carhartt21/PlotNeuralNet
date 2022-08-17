@@ -532,9 +532,9 @@ def multiply(name, to, offset=(1, 0, 0), opacity=0.6, caption='', ):
 
 
 # Concatenate ball
-def concatenate(name, to, offset=(1, 0, 0), opacity=0.6, caption=''):
+def concatenate(name, to, offset=(1, 0, 0), opacity=0.6, caption='', anchor_to = '-east'):
     return r'''
-        \pic[shift={''' + str(offset) + '''}] at (''' + to + '''-east)
+        \pic[shift={''' + str(offset) + '''}] at (''' + to + anchor_to + ''')
             {Ball={
                 name=''' + name + ''',
                 caption=''' + caption + ''',
@@ -654,11 +654,15 @@ def spatial_mask():
     \draw [connection, pos=0.8] (grid_3) -- node {} ++(7,0,0) -- node [fillwhite] {\midarrow} (dummy_mask) -- node {} ++(4, 0, 0) -- node {}(conv_68-far);
 '''
 
-def text(shift=(0,0,0), of='', text=''):
+def text(shift=(0, 0, 0), name = '', of='', text='', options=''):
     return r'''
-        	\node [shift={'''+shift+''')}] at ('''+of+''') {\LARGE{'''+text+'''}};
+        	\node [shift={''' + str(shift) + ''')}, ''' + options + '''] at (''' + of + ''') (''' + name + ''') {''' + text + '''};
             '''
 
+def path(name, of='', to='', position='midway'):
+    return r'''
+        \path (''' + of + ''') -- (''' + to + ''') node[''' + position + '''](''' + name + ''') {};
+            '''
 def legend():
     return r'''
         \pic[shift={(0, -15, 0)}] at (0,0,0)

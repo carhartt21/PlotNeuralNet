@@ -753,11 +753,12 @@ def mult(name, prev, offset=(1, 0, 0), conn=True):
     return layer
 
 
-def conc(name, prev, offset=(1, 0, 0), conn=True):
+def conc(name, prev, offset=(1, 0, 0), conn=True, anchor_to = '-east'):
     layer = tikz.concatenate(
         name='{}'.format(name),
         to='{}'.format(prev),
-        offset='{}'.format(offset)
+        offset='{}'.format(offset), 
+        anchor_to=anchor_to
     )
     if conn:
         tikz.short_connection(

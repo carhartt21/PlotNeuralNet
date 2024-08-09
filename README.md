@@ -48,7 +48,7 @@ import sys
 sys.path.append('../')
 from pycore.tikz import *
 
-# defined your arch
+# define your architecture
 arch = [
     head( '..' ),
     to_cor(),
